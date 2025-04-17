@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlogApplication.BLL.Services;
@@ -12,10 +13,12 @@ namespace SimpleBlogApplication.Controllers
     public class CommentController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CommentController(ApplicationDbContext context)
+        public CommentController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -40,7 +43,8 @@ namespace SimpleBlogApplication.Controllers
             {
                 CommentText = post.CommentText,
                 CommentDateTime = DateTime.Now,
-                PostId = post.PostId
+                PostId = post.PostId,
+                UserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User))
             };
             _context.Comments.Add(comment);
             _context.SaveChanges();

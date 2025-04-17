@@ -23,5 +23,7 @@ namespace SimpleBlogApplication.DAL.Models
         public Status CurrentStatus { get; set; } = Status.Rejected;
         public long? ApproverId { get; set; }
         public ApplicationUser? Approver { get; set; }
+        public List<Comment> UploadedComments { get; set; }
+        public List<SubmittedReaction> SubmittedReactions { get; set; }
     }
 }

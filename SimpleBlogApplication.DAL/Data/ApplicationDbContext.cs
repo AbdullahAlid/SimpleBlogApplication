@@ -20,8 +20,11 @@ namespace SimpleBlogApplication.DAL.Data
             base.OnModelCreating(builder);
             builder.Entity<Post>().HasOne(x => x.User).WithMany(x => x.UploadedPost).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.ClientSetNull);
 
-            base.OnModelCreating(builder);
             builder.Entity<Post>().HasOne(x => x.Approver).WithMany(x => x.ApprovedPost).HasForeignKey(x => x.ApproverId).OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<Comment>().HasOne(x => x.Post).WithMany(x => x.UploadedComments).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<SubmittedReaction>().HasOne(x => x.Post).WithMany(x => x.SubmittedReactions).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.ClientSetNull);
         }
 
     }

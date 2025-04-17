@@ -14,7 +14,9 @@
                         <a href="#"><h3>@post.Title</h3></a>
                         <ul class="post-meta list-inline">
                             <li class="list-inline-item">
-                                <i class="fa fa-user-circle-o"></i> <a href="#">John Doe</a>
+                                <i class="fa fa-user-circle-o"></i> <a href="#">@{
+                                        var a = $"{post.User?.FirstName ?? ""} {post.User?.LastName ?? ""}";
+                                    }@a</a>
                             </li>
                             <li class="list-inline-item">
                                 <i class="fa fa-calendar-o"></i> <a href="#">@post.UploadDateTime.ToString("dd MMM, yyyy h:m")</a>
@@ -24,11 +26,9 @@
                             @post.Content
                         </p>
                         @{
-                            List<Comment> comments = ViewBag.Comments;                           
-                            List<SubmittedReaction> postReactions = ViewBag.Reactions;
-                            long numberOfLike = postReactions.Where(c => c.PostId == post.Id && c.Reaction == Reaction.Like).Count();
-                            long numberOfDislike = postReactions.Where(c => c.PostId == post.Id && c.Reaction == Reaction.Dislike).Count();
-                            int numberOfComment = comments.Where(c => c.PostId == post.Id).Count();
+                            long numberOfLike = post.SubmittedReactions.Where(r => r.Reaction == Reaction.Like).Count();
+                            long numberOfDislike = post.SubmittedReactions.Where(r => r.Reaction == Reaction.Dislike).Count();
+                            int numberOfComment = post.UploadedComments.Count();
                         }
                         <div class="d-flex justify-content-md-start justify-content-between views-content mt-2">
                             <div class="d-flex flex-row align-items-center">

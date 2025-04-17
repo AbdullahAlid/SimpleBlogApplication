@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SimpleBlogApplication.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSetup : Migration
+    public partial class initialSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -215,25 +215,31 @@ namespace SimpleBlogApplication.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PostReactions",
+                name: "SubmittedReactions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PostId = table.Column<long>(type: "bigint", nullable: false),
                     Reaction = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: true)
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    CommentId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostReactions", x => x.Id);
+                    table.PrimaryKey("PK_SubmittedReactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostReactions_AspNetUsers_UserId",
+                        name: "FK_SubmittedReactions_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_PostReactions_Posts_PostId",
+                        name: "FK_SubmittedReactions_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SubmittedReactions_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
@@ -290,16 +296,6 @@ namespace SimpleBlogApplication.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostReactions_PostId",
-                table: "PostReactions",
-                column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostReactions_UserId",
-                table: "PostReactions",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Posts_ApproverId",
                 table: "Posts",
                 column: "ApproverId");
@@ -307,6 +303,21 @@ namespace SimpleBlogApplication.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
                 table: "Posts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmittedReactions_CommentId",
+                table: "SubmittedReactions",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmittedReactions_PostId",
+                table: "SubmittedReactions",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmittedReactions_UserId",
+                table: "SubmittedReactions",
                 column: "UserId");
         }
 
@@ -329,13 +340,13 @@ namespace SimpleBlogApplication.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Comments");
-
-            migrationBuilder.DropTable(
-                name: "PostReactions");
+                name: "SubmittedReactions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Posts");

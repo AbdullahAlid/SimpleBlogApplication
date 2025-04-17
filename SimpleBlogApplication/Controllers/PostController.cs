@@ -24,8 +24,6 @@ namespace SimpleBlogApplication.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            ViewData["Comments"] = _context.Comments.ToList();
-            ViewData["Reactions"] = _context.SubmittedReactions.ToList();
             var posts = _postService.GetAllBlog();
             return View(posts);
         }
@@ -36,31 +34,50 @@ namespace SimpleBlogApplication.Controllers
         [HttpPost]
         public IActionResult Create([Bind("Title, Content")] Post post)
         {
-            post.UserId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
+            post.UserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User)); ;
             _postService.SaveBlog(post);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult ReactionHandler(int id, Reaction type)
         {
+            int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             SubmittedReaction reaction;
-            if (type == Reaction.Like)
+            var checkAvailablity = _context.SubmittedReactions.FirstOrDefault(x => x.UserId == userId && x.PostId == id && x.CommentId == null);
+            if(checkAvailablity == null)
             {
-                reaction = new SubmittedReaction()
+                if (type == Reaction.Like)
                 {
-                    PostId = id,
-                    Reaction = DAL.Models.Reaction.Like
-                };
-                _context.SubmittedReactions.Add(reaction);
+                    reaction = new SubmittedReaction()
+                    {
+                        PostId = id,
+                        UserId = userId,
+                        Reaction = DAL.Models.Reaction.Like
+                    };
+                    _context.SubmittedReactions.Add(reaction);
+                }
+                if (type == Reaction.Dislike)
+                {
+                    reaction = new SubmittedReaction()
+                    {
+                        PostId = id,
+                        UserId = userId,
+                        Reaction = DAL.Models.Reaction.Dislike
+                    };
+                    _context.SubmittedReactions.Add(reaction);
+                }
             }
-            if (type == Reaction.Dislike)
+            else
             {
-                reaction = new SubmittedReaction()
+                if(checkAvailablity.Reaction == type)
                 {
-                    PostId = id,
-                    Reaction = DAL.Models.Reaction.Dislike
-                };
-                _context.SubmittedReactions.Add(reaction);
+                    _context.SubmittedReactions.Remove(checkAvailablity);
+                }
+                else
+                {
+                    checkAvailablity.Reaction = type;
+                    _context.SubmittedReactions.Update(checkAvailablity);
+                }
             }
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));

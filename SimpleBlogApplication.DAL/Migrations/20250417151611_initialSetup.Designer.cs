@@ -12,8 +12,8 @@ using SimpleBlogApplication.DAL.Data;
 namespace SimpleBlogApplication.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250417103853_tableNamechangeWithaddingColumn")]
-    partial class tableNamechangeWithaddingColumn
+    [Migration("20250417151611_initialSetup")]
+    partial class initialSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
