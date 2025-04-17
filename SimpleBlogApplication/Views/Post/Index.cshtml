@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Post>
+
+<div class="container mb80">
+    <div class="page-timeline">
+        <div class="vtimeline-point">
+            <div class="vtimeline-icon">
+                <i class="fa fa-image"></i>
+            </div>
+            <a asp-controller="Post" asp-action="Create">Post new blog</a>
+            @foreach(Post post in Model)
+            {
+                <div class="vtimeline-block">
+                    <span class="vtimeline-date">@post.UploadDateTime.ToString("MMM dd, yyyy")</span><div class="vtimeline-content">
+                        <a href="#"><h3>@post.Title</h3></a>
+                        <ul class="post-meta list-inline">
+                            <li class="list-inline-item">
+                                <i class="fa fa-user-circle-o"></i> <a href="#">John Doe</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <i class="fa fa-calendar-o"></i> <a href="#">@post.UploadDateTime.ToString("dd MMM, yyyy h:m")</a>
+                            </li>
+                        </ul>
+                        <p>
+                            @post.Content
+                        </p>
+                        @{
+                            List<Comment> comments = ViewBag.Comments;                           
+                            List<PostReaction> postReactions = ViewBag.Reactions;
+                            long numberOfLike = postReactions.Where(c => c.PostId == post.Id && c.Reaction == Reaction.Like).Count();
+                            long numberOfDislike = postReactions.Where(c => c.PostId == post.Id && c.Reaction == Reaction.Dislike).Count();
+                            int numberOfComment = comments.Where(c => c.PostId == post.Id).Count();
+                        }
+                        <div class="d-flex justify-content-md-start justify-content-between views-content mt-2">
+                            <div class="d-flex flex-row align-items-center">
+                                <a asp-action="Reaction" asp-route-id="@post.Id" asp-route-type="@Reaction.Like"><i class="bi bi-hand-thumbs-up"></i></a>
+                                <span class="ms-1 views">@numberOfLike</span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center ms-2">
+                                <a asp-action="Reaction" asp-route-id="@post.Id" asp-route-type="@Reaction.Dislike"><i class="bi bi-hand-thumbs-down"></i></a>
+                                <span class="ms-1 views">@numberOfDislike</span>
+                            </div>
+                        </div>
+                        <br>
+                        
+                        <a asp-controller="Comment" asp-action="Create" asp-route-id="@post.Id" class="btn btn-outline-secondary btn-sm"><i class="bi bi-chat-left-fill">&nbsp;</i>Comment&nbsp;@numberOfComment</a>
+                    </div>
+                </div>
+                <hr />
+                <br />
+            }           
+        </div>
+    </div>
+</div>
