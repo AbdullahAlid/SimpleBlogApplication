@@ -269,15 +269,15 @@ namespace SimpleBlogApplication.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("ApproverId")
+                    b.Property<long?>("ApproverId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
+                    b.Property<int>("CurrentStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -291,18 +291,23 @@ namespace SimpleBlogApplication.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApproverId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("SimpleBlogApplication.DAL.Models.PostReaction", b =>
+            modelBuilder.Entity("SimpleBlogApplication.DAL.Models.SubmittedReaction", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CommentId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
@@ -315,11 +320,13 @@ namespace SimpleBlogApplication.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommentId");
+
                     b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PostReactions");
+                    b.ToTable("SubmittedReactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -390,15 +397,25 @@ namespace SimpleBlogApplication.DAL.Migrations
 
             modelBuilder.Entity("SimpleBlogApplication.DAL.Models.Post", b =>
                 {
+                    b.HasOne("SimpleBlogApplication.DAL.Models.ApplicationUser", "Approver")
+                        .WithMany("ApprovedPost")
+                        .HasForeignKey("ApproverId");
+
                     b.HasOne("SimpleBlogApplication.DAL.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("UploadedPost")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Approver");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SimpleBlogApplication.DAL.Models.PostReaction", b =>
+            modelBuilder.Entity("SimpleBlogApplication.DAL.Models.SubmittedReaction", b =>
                 {
+                    b.HasOne("SimpleBlogApplication.DAL.Models.Comment", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentId");
+
                     b.HasOne("SimpleBlogApplication.DAL.Models.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId")
@@ -409,9 +426,18 @@ namespace SimpleBlogApplication.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("UserId");
 
+                    b.Navigation("Comment");
+
                     b.Navigation("Post");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SimpleBlogApplication.DAL.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("ApprovedPost");
+
+                    b.Navigation("UploadedPost");
                 });
 #pragma warning restore 612, 618
         }

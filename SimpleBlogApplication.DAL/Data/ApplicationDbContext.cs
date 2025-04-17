@@ -13,8 +13,16 @@ namespace SimpleBlogApplication.DAL.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<Post> Posts { get; set; }
-           public DbSet<PostReaction> PostReactions { get; set; }
+        public DbSet<SubmittedReaction> SubmittedReactions { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<Post>().HasOne(x => x.User).WithMany(x => x.UploadedPost).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+
+            base.OnModelCreating(builder);
+            builder.Entity<Post>().HasOne(x => x.Approver).WithMany(x => x.ApprovedPost).HasForeignKey(x => x.ApproverId).OnDelete(DeleteBehavior.ClientSetNull);
+        }
 
     }
 }

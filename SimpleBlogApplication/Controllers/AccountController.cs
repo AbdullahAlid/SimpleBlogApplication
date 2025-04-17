@@ -30,13 +30,12 @@ namespace SimpleBlogApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                int a = user.Email.IndexOf('@');
                 ApplicationUser appUser = new ApplicationUser
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    UserName = user.Email.Substring(0, a)
+                    UserName = user.Email
                 };
 
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
@@ -55,9 +54,11 @@ namespace SimpleBlogApplication.Controllers
             return View(user);
         }
         
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = "/")
         {
-            return View();
+            LoginViewModel login = new LoginViewModel();
+            login.ReturnUrl = returnUrl;
+            return View(login);
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -66,7 +67,7 @@ namespace SimpleBlogApplication.Controllers
             if (result.Succeeded)
             {
                 // Handle successful login
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return Redirect(model.ReturnUrl ?? "/");
             }
             else
             {
@@ -74,6 +75,13 @@ namespace SimpleBlogApplication.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(model);
             }
+        }
+
+        //[HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("index", "Post");
         }
     }
 }

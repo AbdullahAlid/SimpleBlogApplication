@@ -12,8 +12,8 @@ using SimpleBlogApplication.DAL.Data;
 namespace SimpleBlogApplication.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250417035041_addTwoColumnToUserTable")]
-    partial class addTwoColumnToUserTable
+    [Migration("20250417100806_InitialSetup")]
+    partial class InitialSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -272,15 +272,15 @@ namespace SimpleBlogApplication.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("ApproverId")
+                    b.Property<long?>("ApproverId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
+                    b.Property<int>("CurrentStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -293,6 +293,8 @@ namespace SimpleBlogApplication.DAL.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApproverId");
 
                     b.HasIndex("UserId");
 
@@ -393,9 +395,15 @@ namespace SimpleBlogApplication.DAL.Migrations
 
             modelBuilder.Entity("SimpleBlogApplication.DAL.Models.Post", b =>
                 {
+                    b.HasOne("SimpleBlogApplication.DAL.Models.ApplicationUser", "Approver")
+                        .WithMany("ApprovedPost")
+                        .HasForeignKey("ApproverId");
+
                     b.HasOne("SimpleBlogApplication.DAL.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("UploadedPost")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Approver");
 
                     b.Navigation("User");
                 });
@@ -415,6 +423,13 @@ namespace SimpleBlogApplication.DAL.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SimpleBlogApplication.DAL.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("ApprovedPost");
+
+                    b.Navigation("UploadedPost");
                 });
 #pragma warning restore 612, 618
         }

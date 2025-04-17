@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
@@ -7,6 +8,7 @@ using SimpleBlogApplication.ViewModel;
 
 namespace SimpleBlogApplication.Controllers
 {
+    [Authorize]
     public class CommentController : Controller
     {
         private readonly ApplicationDbContext _context;

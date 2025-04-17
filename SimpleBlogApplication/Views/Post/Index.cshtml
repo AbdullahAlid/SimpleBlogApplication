@@ -25,18 +25,18 @@
                         </p>
                         @{
                             List<Comment> comments = ViewBag.Comments;                           
-                            List<PostReaction> postReactions = ViewBag.Reactions;
+                            List<SubmittedReaction> postReactions = ViewBag.Reactions;
                             long numberOfLike = postReactions.Where(c => c.PostId == post.Id && c.Reaction == Reaction.Like).Count();
                             long numberOfDislike = postReactions.Where(c => c.PostId == post.Id && c.Reaction == Reaction.Dislike).Count();
                             int numberOfComment = comments.Where(c => c.PostId == post.Id).Count();
                         }
                         <div class="d-flex justify-content-md-start justify-content-between views-content mt-2">
                             <div class="d-flex flex-row align-items-center">
-                                <a asp-action="Reaction" asp-route-id="@post.Id" asp-route-type="@Reaction.Like"><i class="bi bi-hand-thumbs-up"></i></a>
+                                <a asp-action="ReactionHandler" asp-route-id="@post.Id" asp-route-type="@Reaction.Like"><i class="bi bi-hand-thumbs-up"></i></a>
                                 <span class="ms-1 views">@numberOfLike</span>
                             </div>
                             <div class="d-flex flex-row align-items-center ms-2">
-                                <a asp-action="Reaction" asp-route-id="@post.Id" asp-route-type="@Reaction.Dislike"><i class="bi bi-hand-thumbs-down"></i></a>
+                                <a asp-action="ReactionHandler" asp-route-id="@post.Id" asp-route-type="@Reaction.Dislike"><i class="bi bi-hand-thumbs-down"></i></a>
                                 <span class="ms-1 views">@numberOfDislike</span>
                             </div>
                         </div>

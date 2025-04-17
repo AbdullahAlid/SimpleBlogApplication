@@ -21,6 +21,7 @@ namespace SimpleBlogApplication.DAL.Models
         [ForeignKey("UserId")]
         public ApplicationUser? User { get; set; }
         public Status CurrentStatus { get; set; } = Status.Rejected;
-        public long ApproverId { get; set; }
+        public long? ApproverId { get; set; }
+        public ApplicationUser? Approver { get; set; }
     }
 }

@@ -42,12 +42,13 @@
                                 @User?.Identity?.Name
                             </li>
                             <li class="nav-item">
-                                <form method="post" asp-controller="account" asp-action="logout">
-                                    <button type="submit" style="width:auto"
-                                            class="nav-link btn btn-link py-0">
-                                        Logout 
-                                    </button>
-                                </form>
+                                @* <form method="post" asp-controller="account" asp-action="logout"> *@
+                                @*     <button type="submit" style="width:auto" *@
+                                @*             class="nav-link btn btn-link py-0"> *@
+                                @*         Logout  *@
+                                @*     </button> *@
+                                @* </form> *@
+                                <a asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else

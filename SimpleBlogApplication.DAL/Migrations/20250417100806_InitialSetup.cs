@@ -32,6 +32,8 @@ namespace SimpleBlogApplication.DAL.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -168,12 +170,17 @@ namespace SimpleBlogApplication.DAL.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UploadDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
-                    ApproverId = table.Column<long>(type: "bigint", nullable: false)
+                    CurrentStatus = table.Column<int>(type: "int", nullable: false),
+                    ApproverId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Posts_AspNetUsers_ApproverId",
+                        column: x => x.ApproverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Posts_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -291,6 +298,11 @@ namespace SimpleBlogApplication.DAL.Migrations
                 name: "IX_PostReactions_UserId",
                 table: "PostReactions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_ApproverId",
+                table: "Posts",
+                column: "ApproverId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
