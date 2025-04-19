@@ -18,8 +18,8 @@ namespace SimpleBlogApplication.DAL.Models
         public long? PostId { get; set; }
         [ForeignKey("PostId")]
         public Post? Post { get; set; }        
-        public long? UserId { get; set; }
-        [ForeignKey("UserId")]
-        public ApplicationUser? User { get; set; }        
+        public long? AppUserId { get; set; }
+        [ForeignKey("AppUserId")]
+        public ApplicationUser? AppUser { get; set; }        
     }
 }

@@ -12,42 +12,36 @@ namespace SimpleBlogApplication.Controllers
     [Authorize]
     public class CommentController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly CommentService _commentService;
+        private readonly PostService _postService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CommentController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public CommentController(CommentService commentService, PostService postService, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _commentService = commentService;
+            _postService = postService;
             _userManager = userManager;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        [AllowAnonymous]
         public IActionResult Create(int id)
         {
-            Post? post = _context.Posts.FirstOrDefault(c => c.Id == id);
+            Post? post = _postService.GetBlog(id);
             var postComment = new PostComment()
             {
                 PostTitle = post.Title,
                 PostBody = post.Content,
-                Comments = _context.Comments.Where(c => c.PostId == id).OrderByDescending(o => o.Id).ToList(),
-                PostId = id
+                PostId = post.Id,
+                Blogger = $"{post.AppUser?.FirstName??""} {post.AppUser?.LastName??""}",
+                Reactions = post.SubmittedReactions??new List<SubmittedReaction>(),
+                Comments = post.UploadedComments.OrderByDescending(o => o.Id)
             };
             return View(postComment);
         }
         [HttpPost]
         public IActionResult Create([Bind("CommentText, PostId")] PostComment post)
         {
-            Comment comment = new Comment()
-            {
-                CommentText = post.CommentText,
-                CommentDateTime = DateTime.Now,
-                PostId = post.PostId,
-                UserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User))
-            };
-            _context.Comments.Add(comment);
-            _context.SaveChanges();
+            long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
+            _commentService.AddComment(userId, post.PostId, post.CommentText);
             return RedirectToAction(nameof(Create), new { id = post.PostId });
         }
     }

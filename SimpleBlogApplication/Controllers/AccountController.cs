@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.ViewModel;
@@ -21,10 +22,12 @@ namespace SimpleBlogApplication.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(User user)
         {
@@ -37,6 +40,15 @@ namespace SimpleBlogApplication.Controllers
                     Email = user.Email,
                     UserName = user.Email
                 };
+
+                //if (_userManager.Users.ToList().Count == 0)
+                //{
+                //    await _userManager.AddToRoleAsync(appUser, "Admin");
+                //}
+                //else
+                //{
+                //    await _userManager.AddToRoleAsync(appUser, "User");
+                //}
 
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
 
@@ -77,7 +89,7 @@ namespace SimpleBlogApplication.Controllers
             }
         }
 
-        //[HttpPost]
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

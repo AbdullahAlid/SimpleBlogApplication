@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SimpleBlogApplication.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class initialSetup : Migration
+    public partial class freshDBSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -169,7 +171,7 @@ namespace SimpleBlogApplication.DAL.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UploadDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    AppUserId = table.Column<long>(type: "bigint", nullable: true),
                     CurrentStatus = table.Column<int>(type: "int", nullable: false),
                     ApproverId = table.Column<long>(type: "bigint", nullable: true)
                 },
@@ -177,13 +179,13 @@ namespace SimpleBlogApplication.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_AspNetUsers_ApproverId",
-                        column: x => x.ApproverId,
+                        name: "FK_Posts_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Posts_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Posts_AspNetUsers_ApproverId",
+                        column: x => x.ApproverId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -197,14 +199,14 @@ namespace SimpleBlogApplication.DAL.Migrations
                     CommentText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommentDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PostId = table.Column<long>(type: "bigint", nullable: true),
-                    UserId = table.Column<long>(type: "bigint", nullable: true)
+                    AppUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Comments_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -222,15 +224,15 @@ namespace SimpleBlogApplication.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PostId = table.Column<long>(type: "bigint", nullable: false),
                     Reaction = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    AppUserId = table.Column<long>(type: "bigint", nullable: true),
                     CommentId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubmittedReactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SubmittedReactions_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_SubmittedReactions_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -242,8 +244,16 @@ namespace SimpleBlogApplication.DAL.Migrations
                         name: "FK_SubmittedReactions_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { 1L, "agfga", "Admin", "ADMIN" },
+                    { 2L, "agfga", "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -286,14 +296,14 @@ namespace SimpleBlogApplication.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_AppUserId",
+                table: "Comments",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_PostId",
                 table: "Comments",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_ApproverId",
@@ -301,9 +311,14 @@ namespace SimpleBlogApplication.DAL.Migrations
                 column: "ApproverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_UserId",
+                name: "IX_Posts_AppUserId",
                 table: "Posts",
-                column: "UserId");
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmittedReactions_AppUserId",
+                table: "SubmittedReactions",
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubmittedReactions_CommentId",
@@ -314,11 +329,6 @@ namespace SimpleBlogApplication.DAL.Migrations
                 name: "IX_SubmittedReactions_PostId",
                 table: "SubmittedReactions",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubmittedReactions_UserId",
-                table: "SubmittedReactions",
-                column: "UserId");
         }
 
         /// <inheritdoc />

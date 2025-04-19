@@ -14,9 +14,9 @@ namespace SimpleBlogApplication.DAL.Models
         [ForeignKey(nameof(PostId))]
         public Post? Post { get; set; }
         public Reaction Reaction { get; set; }
-        public long? UserId { get; set; }
-        [ForeignKey(nameof(UserId))]
-        public ApplicationUser? User { get; set; }
+        public long? AppUserId { get; set; }
+        [ForeignKey(nameof(AppUserId))]
+        public ApplicationUser? AppUser { get; set; }
         public long? CommentId { get; set; }
         [ForeignKey(nameof(CommentId))]
         public Comment? Comment { get; set; }

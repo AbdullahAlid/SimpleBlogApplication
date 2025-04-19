@@ -8,7 +8,8 @@ namespace SimpleBlogApplication.DAL.Models
 {
     public enum Status
     {
+        Pending,
         Rejected,
-        Approved       
+        Approved      
     }
 }

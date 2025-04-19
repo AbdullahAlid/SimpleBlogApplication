@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.DAL.Repositories;
 
@@ -27,5 +28,18 @@ namespace SimpleBlogApplication.BLL.Services
         {
             return _postRepository.GetAll();
         }
+
+        public Post? GetBlog(long id) 
+        {
+            return _postRepository.GetById(id);
+        }
+
+        public void UpdatePost(long id, Status status)
+        {
+            var post = GetBlog(id);
+            post.CurrentStatus = status;
+            _postRepository.UpdatePost(post);
+        }
+        
     }
 }

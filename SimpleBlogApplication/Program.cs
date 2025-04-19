@@ -20,6 +20,13 @@ namespace SimpleBlogApplication
             builder.Services.AddScoped<PostRepository>();
             builder.Services.AddScoped<PostService>();
 
+            builder.Services.AddScoped<ReactionRepository>();
+            builder.Services.AddScoped<ReactionService>();
+
+            builder.Services.AddScoped<CommentRepository>();
+            builder.Services.AddScoped<CommentService>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

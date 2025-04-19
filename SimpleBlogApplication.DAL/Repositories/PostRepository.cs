@@ -20,17 +20,23 @@ namespace SimpleBlogApplication.DAL.Repositories
 
         public IEnumerable<Post> GetAll()
         {
-            return _context.Posts.Include(p => p.User).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).OrderByDescending(p => p.Id).ToList();
+            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).OrderByDescending(p => p.Id).ToList();
         }
 
-        public Post? GetById(int id)
+        public Post? GetById(long id)
         {
-            return _context.Posts.FirstOrDefault(p=> p.Id == id);
+            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).FirstOrDefault(p=> p.Id == id);
         }
 
         public void SaveBlog(Post post)
         {
             _context.Posts.Add(post);
+            _context.SaveChanges();
+        }  
+        
+        public void UpdatePost(Post post)
+        {
+            _context.Posts.Update(post);
             _context.SaveChanges();
         }
     }

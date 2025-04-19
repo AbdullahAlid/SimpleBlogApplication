@@ -17,13 +17,13 @@ namespace SimpleBlogApplication.DAL.Models
         public string Content { get; set; }
         [Required]
         public DateTime UploadDateTime { get; set; }
-        public long? UserId { get; set; }
-        [ForeignKey("UserId")]
-        public ApplicationUser? User { get; set; }
-        public Status CurrentStatus { get; set; } = Status.Rejected;
+        public long? AppUserId { get; set; }
+        [ForeignKey("AppUserId")]
+        public ApplicationUser? AppUser { get; set; }
+        public Status CurrentStatus { get; set; } = Status.Pending;
         public long? ApproverId { get; set; }
         public ApplicationUser? Approver { get; set; }
-        public List<Comment> UploadedComments { get; set; }
-        public List<SubmittedReaction> SubmittedReactions { get; set; }
+        public List<Comment>? UploadedComments { get; set; }
+        public List<SubmittedReaction>? SubmittedReactions { get; set; }
     }
 }

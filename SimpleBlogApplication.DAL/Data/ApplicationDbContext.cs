@@ -18,7 +18,26 @@ namespace SimpleBlogApplication.DAL.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<Post>().HasOne(x => x.User).WithMany(x => x.UploadedPost).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+            builder.Entity<ApplicationRole>().HasData(
+                new ApplicationRole()
+                {
+                    Id = 1,
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "agfga"
+                },
+                new ApplicationRole()
+                {
+                    Id = 2,
+                    Name = "User",
+                    NormalizedName = "USER",
+                    ConcurrencyStamp = "agfga"
+                }
+            );
+                
+
+            
+            builder.Entity<Post>().HasOne(x => x.AppUser).WithMany(x => x.UploadedPost).HasForeignKey(x => x.AppUserId).OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Entity<Post>().HasOne(x => x.Approver).WithMany(x => x.ApprovedPost).HasForeignKey(x => x.ApproverId).OnDelete(DeleteBehavior.ClientSetNull);
 
