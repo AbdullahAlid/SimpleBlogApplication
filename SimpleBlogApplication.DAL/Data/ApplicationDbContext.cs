@@ -23,15 +23,13 @@ namespace SimpleBlogApplication.DAL.Data
                 {
                     Id = 1,
                     Name = "Admin",
-                    NormalizedName = "ADMIN",
-                    ConcurrencyStamp = "agfga"
+                    NormalizedName = "ADMIN",                  
                 },
                 new ApplicationRole()
                 {
                     Id = 2,
                     Name = "User",
                     NormalizedName = "USER",
-                    ConcurrencyStamp = "agfga"
                 }
             );
                 

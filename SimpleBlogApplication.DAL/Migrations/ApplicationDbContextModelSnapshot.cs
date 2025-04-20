@@ -158,14 +158,12 @@ namespace SimpleBlogApplication.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "agfga",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "agfga",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -25,5 +25,6 @@ namespace SimpleBlogApplication.DAL.Models
         public ApplicationUser? Approver { get; set; }
         public List<Comment>? UploadedComments { get; set; }
         public List<SubmittedReaction>? SubmittedReactions { get; set; }
+
     }
 }

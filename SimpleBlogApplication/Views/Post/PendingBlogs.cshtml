@@ -1,21 +1,19 @@
-﻿@model IEnumerable<Post>
+﻿@model BlogList
 @{
-    int index = ViewBag.PageIndex;
+    int index = Model.NumberOfBlogs;
 }
 <div class="container mb80">
     <div class="page-timeline">
         <div class="vtimeline-point">
-            @if (index < Model.Count())
+            @if (index < Model.Blogs.Count())
             {
-                <a asp-controller="Post" asp-action="LoadMore" class="btn btn-info">Load More</a>
+                <a asp-controller="Post" asp-action="LoadMorePending" asp-route-numberToIncrease="@index" class="btn btn-info">Load More</a>
             }
             <div class="vtimeline-icon">
                 <i class="fa fa-image"></i>
-            </div>
-            
+            </div>            
 
-            <a asp-controller="Post" asp-action="Create">Post new blog</a>
-            @foreach (Post post in Model.Take(index))
+            @foreach (Post post in Model.Blogs.Take(index))
             {
                 <div class="vtimeline-block">
                     <span class="vtimeline-date">@post.UploadDateTime.ToString("MMM dd, yyyy")</span><div class="vtimeline-content">

@@ -15,7 +15,7 @@ namespace SimpleBlogApplication.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction(nameof(Index), nameof(Post));
         }
 
         public IActionResult Privacy()

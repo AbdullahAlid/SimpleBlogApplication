@@ -12,8 +12,8 @@ using SimpleBlogApplication.DAL.Data;
 namespace SimpleBlogApplication.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250419180637_freshDBSetup")]
-    partial class freshDBSetup
+    [Migration("20250420024945_FreshDBSetup")]
+    partial class FreshDBSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,14 +161,12 @@ namespace SimpleBlogApplication.DAL.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "agfga",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "agfga",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -40,20 +40,18 @@ namespace SimpleBlogApplication.Controllers
                     Email = user.Email,
                     UserName = user.Email
                 };
-
-                //if (_userManager.Users.ToList().Count == 0)
-                //{
-                //    await _userManager.AddToRoleAsync(appUser, "Admin");
-                //}
-                //else
-                //{
-                //    await _userManager.AddToRoleAsync(appUser, "User");
-                //}
-
                 IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
 
                 if (result.Succeeded) 
-                { 
+                {
+                    if (_userManager.Users.ToList().Count == 1)
+                    {
+                        await _userManager.AddToRoleAsync(appUser, "Admin");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(appUser, "User");
+                    }
                     await _signInManager.SignInAsync(appUser, false);
                     return RedirectToAction("Index", "Post");
                 }

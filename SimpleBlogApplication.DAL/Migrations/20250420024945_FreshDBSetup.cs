@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SimpleBlogApplication.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class freshDBSetup : Migration
+    public partial class FreshDBSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -252,8 +252,8 @@ namespace SimpleBlogApplication.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1L, "agfga", "Admin", "ADMIN" },
-                    { 2L, "agfga", "User", "USER" }
+                    { 1L, null, "Admin", "ADMIN" },
+                    { 2L, null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
