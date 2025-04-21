@@ -22,6 +22,7 @@ namespace SimpleBlogApplication.Controllers
             _postService = postService;
             _userManager = userManager;
         }
+
         [AllowAnonymous]
         public IActionResult Create(int id)
         {
@@ -37,6 +38,7 @@ namespace SimpleBlogApplication.Controllers
             };
             return View(postComment);
         }
+
         [HttpPost]
         public IActionResult Create([Bind("CommentText, PostId")] PostComment post)
         {

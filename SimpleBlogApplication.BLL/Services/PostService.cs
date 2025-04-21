@@ -22,6 +22,7 @@ namespace SimpleBlogApplication.BLL.Services
         {
             post.UploadDateTime = DateTime.Now;
             _postRepository.SaveBlog(post);
+            
         }
 
         public IEnumerable<Post> GetAllBlog()
@@ -34,10 +35,11 @@ namespace SimpleBlogApplication.BLL.Services
             return _postRepository.GetById(id);
         }
 
-        public void UpdatePost(long id, Status status)
+        public void UpdatePost(long id, Status status, long userId)
         {
             var post = GetBlog(id);
             post.CurrentStatus = status;
+            post.ApproverId = userId;
             _postRepository.UpdatePost(post);
         }
         

@@ -18,15 +18,18 @@ namespace SimpleBlogApplication.Controllers
             _passwordHasher = passwordHasher;
             _signInManager = signInManager;
         }
+
         public IActionResult Index()
         {
             return View();
         }
+
         [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
+
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(User user)
@@ -70,6 +73,7 @@ namespace SimpleBlogApplication.Controllers
             login.ReturnUrl = returnUrl;
             return View(login);
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -86,7 +90,6 @@ namespace SimpleBlogApplication.Controllers
                 return View(model);
             }
         }
-
 
         public async Task<IActionResult> Logout()
         {

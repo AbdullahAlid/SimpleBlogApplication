@@ -6,6 +6,7 @@ namespace SimpleBlogApplication.ViewModel
     public class BlogList
     {
         public IEnumerable<Post> Blogs {  get; set; }
-        public int NumberOfBlogs { get; set; } = 5;
+        public int StartFrom { get; set; }
+        public long TotalBlogs { get; set; }
     }
 }

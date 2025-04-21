@@ -13,7 +13,7 @@ namespace SimpleBlogApplication.Controllers
     {
         private readonly PostService _postService;
         private readonly ReactionService _reactionService;
-        private readonly UserManager<ApplicationUser> _userManager;        
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public PostController(PostService postService, ReactionService reactionService, UserManager<ApplicationUser> userManager)
         {
@@ -23,19 +23,27 @@ namespace SimpleBlogApplication.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult LoadMore(int numberToIncrease)
+        public IActionResult LoadPrev(int startfrom)
         {
-            return RedirectToAction("Index", new {increasedNumber = numberToIncrease+5 });
+            return RedirectToAction("Index", new { skip = startfrom - 5 });
         }
 
         [AllowAnonymous]
-        public IActionResult Index(int increasedNumber = 5)
+        public IActionResult LoadNext(int startfrom)
         {
-            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved);
+            return RedirectToAction("Index", new {skip = startfrom });
+        }
+
+        [AllowAnonymous]
+        public IActionResult Index(int skip = 0, int step = 5)
+        {
+            ViewData["userId"] = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step);
             var blogList = new BlogList()
             {
                 Blogs = posts,
-                NumberOfBlogs = increasedNumber
+                StartFrom = skip,
+                TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
             };
             return View(blogList);
         }
@@ -61,28 +69,34 @@ namespace SimpleBlogApplication.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult PendingBlogs(int increasedNumber = 5)
+        public IActionResult PendingBlogs(int skip = 0, int step = 5)
         {
-            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending);           
+            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Skip(skip).Take(step);
             var blogList = new BlogList()
             {
                 Blogs = posts,
-                NumberOfBlogs = increasedNumber
+                StartFrom = skip,
+                TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Count()
             };
             return View(blogList);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult Approval(long id, Status status = Status.Pending)
+        public IActionResult Approval(long id, Status status)
         {
-            _postService.UpdatePost(id, status);
+            long userId = Convert.ToInt64(_userManager.GetUserId(User));
+            _postService.UpdatePost(id, status, userId);
             return RedirectToAction(nameof(PendingBlogs));
         }
 
-        public IActionResult LoadMorePending(int numberToIncrease)
+        public IActionResult LoadNextPending(int startfrom)
         {
-            return RedirectToAction("PendingBlogs", new { increasedNumber = numberToIncrease + 5 });
+            return RedirectToAction(nameof(PendingBlogs), new { skip = startfrom });
+        }
+        public IActionResult LoadPrevPending(int startfrom)
+        {
+            return RedirectToAction(nameof(PendingBlogs), new { skip = startfrom - 5 });
         }
     }
 }
