@@ -61,9 +61,14 @@ namespace SimpleBlogApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult ReactionHandler(int id, Reaction type)
+        public IActionResult ReactionHandler(int id, Reaction type, string page = "")
         {
-            int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));           
+            int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            if (page == "create")
+            {
+                _reactionService.HandleReaction(userId, id, type);
+                return RedirectToAction(nameof(Create),nameof(Comment), new {id = id});
+            }                      
             _reactionService.HandleReaction(userId, id, type);            
             return RedirectToAction(nameof(Index));
         }
@@ -94,6 +99,7 @@ namespace SimpleBlogApplication.Controllers
         {
             return RedirectToAction(nameof(PendingBlogs), new { skip = startfrom });
         }
+
         public IActionResult LoadPrevPending(int startfrom)
         {
             return RedirectToAction(nameof(PendingBlogs), new { skip = startfrom - 5 });

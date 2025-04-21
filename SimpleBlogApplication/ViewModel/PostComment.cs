@@ -11,5 +11,6 @@ namespace SimpleBlogApplication.ViewModel
         public IEnumerable<SubmittedReaction> Reactions { get; set; }
         public string CommentText { get; set; }
         public long PostId { get; set; }
+        public long UserId { get; set; }
     }
 }

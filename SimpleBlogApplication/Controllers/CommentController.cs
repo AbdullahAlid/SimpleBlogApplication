@@ -34,7 +34,8 @@ namespace SimpleBlogApplication.Controllers
                 PostId = post.Id,
                 Blogger = $"{post.AppUser?.FirstName??""} {post.AppUser?.LastName??""}",
                 Reactions = post.SubmittedReactions??new List<SubmittedReaction>(),
-                Comments = post.UploadedComments.OrderByDescending(o => o.Id)
+                Comments = post.UploadedComments.OrderByDescending(o => o.Id),
+                UserId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User))
             };
             return View(postComment);
         }
