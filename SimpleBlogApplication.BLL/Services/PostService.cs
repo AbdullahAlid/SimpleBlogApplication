@@ -42,6 +42,12 @@ namespace SimpleBlogApplication.BLL.Services
             post.ApproverId = userId;
             _postRepository.UpdatePost(post);
         }
+
+        public IEnumerable<Post> GetTopFiveBlogs()
+        {
+            var posts = GetAllBlog().OrderByDescending(p => (p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count())).Take(5);
+            return posts;
+        }
         
     }
 }

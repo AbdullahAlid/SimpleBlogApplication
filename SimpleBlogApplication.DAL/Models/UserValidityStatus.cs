@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SimpleBlogApplication.DAL.Models
 {
-    public enum Status
+    public enum UserValidityStatus
     {
-        Pending,
-        Rejected,
-        Approved,
+        Unblocked,
+        Blocked
     }
 }

@@ -14,6 +14,7 @@ namespace SimpleBlogApplication.Controllers
         private readonly PostService _postService;
         private readonly ReactionService _reactionService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private bool _filtered;
 
         public PostController(PostService postService, ReactionService reactionService, UserManager<ApplicationUser> userManager)
         {
@@ -23,15 +24,23 @@ namespace SimpleBlogApplication.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult LoadPrev(int startfrom)
+        public IActionResult LoadPrev(int startfrom, bool loadPrevPage)
         {
+            if (loadPrevPage)
+            {   
+                return RedirectToAction(nameof(OwnBlogs), new { skip = startfrom - 5 });
+            }
             return RedirectToAction("Index", new { skip = startfrom - 5 });
         }
 
         [AllowAnonymous]
-        public IActionResult LoadNext(int startfrom)
+        public IActionResult LoadNext(int startfrom, bool loadNextPage)
         {
-            return RedirectToAction("Index", new {skip = startfrom });
+            if (loadNextPage)
+            {               
+                return RedirectToAction(nameof(OwnBlogs), new { skip = startfrom });
+            }
+            return RedirectToAction(nameof(Index), new {skip = startfrom });
         }
 
         [AllowAnonymous]
@@ -64,6 +73,11 @@ namespace SimpleBlogApplication.Controllers
         public IActionResult ReactionHandler(int id, Reaction type, string page = "")
         {
             int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            if (page == "own")
+            {
+                _reactionService.HandleReaction(userId, id, type);
+                return RedirectToAction(nameof(OwnBlogs));
+            }
             if (page == "create")
             {
                 _reactionService.HandleReaction(userId, id, type);
@@ -103,6 +117,66 @@ namespace SimpleBlogApplication.Controllers
         public IActionResult LoadPrevPending(int startfrom)
         {
             return RedirectToAction(nameof(PendingBlogs), new { skip = startfrom - 5 });
+        }
+
+        public IActionResult OwnBlogs(int skip = 0, int step = 5)
+        {
+            long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            ViewData["userId"] = userId;
+            ViewData["isFilterable"] = true;
+            var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Skip(skip).Take(step);
+            var blogList = new BlogList()
+            {
+                Blogs = posts,
+                StartFrom = skip,
+                TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Count()
+            };
+            return View(nameof(Index), blogList);
+        }
+
+        [HttpPost]
+        public IActionResult PostFilter(Status filteredValue, int skip = 0, int step = 5)
+        {            
+            return RedirectToAction(nameof(FilteredBlogs), new { filteredValue = filteredValue });
+        }
+
+        public IActionResult FilteredBlogs(Status filteredValue, int skip = 0, int step = 5)
+        {
+            long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            ViewData["userId"] = userId;
+            ViewData["isFilterable"] = true;
+            ViewData["specificFilter"] = true;
+            ViewData["filteredValue"] = filteredValue;
+            var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Skip(skip).Take(step);
+            var blogList = new BlogList()
+            {
+                Blogs = posts,
+                StartFrom = skip,
+                TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Count()
+            };
+            return View(nameof(Index), blogList);
+        }
+
+        public IActionResult LoadPrevStatusWise(int startfrom, Status status)
+        {
+            return RedirectToAction(nameof(FilteredBlogs), new { skip = startfrom - 5, filteredValue = status});
+        }
+
+        public IActionResult LoadNextStatusWise(int startfrom, Status status)
+        {            
+            return RedirectToAction(nameof(FilteredBlogs), new { skip = startfrom, filteredValue = status });
+        }
+
+        public IActionResult TopBlogs()
+        {
+            long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            ViewData["userId"] = userId;
+            var posts = _postService.GetTopFiveBlogs();          
+            var blogList = new BlogList()
+            {
+                Blogs = posts,
+            };
+            return View(nameof(Index), blogList);
         }
     }
 }
