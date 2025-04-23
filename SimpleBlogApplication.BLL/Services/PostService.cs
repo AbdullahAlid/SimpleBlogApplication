@@ -27,12 +27,12 @@ namespace SimpleBlogApplication.BLL.Services
 
         public IEnumerable<Post> GetAllBlog()
         {
-            return _postRepository.GetAll();
+            return _postRepository.GetAllBlog();
         }
 
         public Post? GetBlog(long id) 
         {
-            return _postRepository.GetById(id);
+            return _postRepository.GetBlog(id);
         }
 
         public void UpdatePost(long id, Status status, long userId)

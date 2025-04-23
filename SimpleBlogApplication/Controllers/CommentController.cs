@@ -26,14 +26,14 @@ namespace SimpleBlogApplication.Controllers
         [AllowAnonymous]
         public IActionResult Create(int id)
         {
-            Post? post = _postService.GetBlog(id);
+            var post = _postService.GetBlog(id);
             var postComment = new PostComment()
             {
                 PostTitle = post.Title,
                 PostBody = post.Content,
                 PostId = post.Id,
-                Blogger = $"{post.AppUser?.FirstName??""} {post.AppUser?.LastName??""}",
-                Reactions = post.SubmittedReactions??new List<SubmittedReaction>(),
+                Blogger = $"{post.AppUser?.FirstName ?? ""} {post.AppUser?.LastName ?? ""}",
+                Reactions = post.SubmittedReactions ?? new List<SubmittedReaction>(),
                 Comments = post.UploadedComments.OrderByDescending(o => o.Id),
                 UserId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User))
             };

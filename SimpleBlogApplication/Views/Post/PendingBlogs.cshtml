@@ -2,11 +2,13 @@
 @{
     int index = Model.StartFrom + 5;
     int prevIndex = index - 5;
+    string message = (string)TempData["selectPlease"] ?? "";
+    var postId = TempData["Id"] ?? ViewData["Id"];
 }
 <div class="container mb80">
     <div class="page-timeline">
         <div class="vtimeline-point">
-             <div>
+            <div>
                 @if (prevIndex > 0)
                 {
                     <a asp-controller="Post" asp-action="LoadPrevPending" asp-route-startfrom="@prevIndex" class="btn btn-info">Prev</a>
@@ -24,7 +26,7 @@
             {
                 <div class="vtimeline-block">
                     <span class="vtimeline-date">@post.UploadDateTime.ToString("MMM dd, yyyy")</span><div class="vtimeline-content">
-                        <a href="#"><h3>@post.Title</h3></a>
+                        <h3 class="text-info-emphasis">@post.Title</h3>
                         <ul class="post-meta list-inline">
                             <li class="list-inline-item">
                                 <i class="fa fa-user-circle-o"></i> <a href="#">
@@ -40,11 +42,13 @@
                         <p>
                             @post.Content
                         </p>
-
+                        @if (post.Id == (int)postId){
+                            <span class="text-danger">@message</span>
+                        }
+                        
                         <form asp-action="Approval" method="post">
                             <input type="hidden" name="id" value="@post.Id" />
                             <select asp-for="@post.CurrentStatus" asp-items="Html.GetEnumSelectList<Status>()" name="status">
-                                <option>---Select status---</option>
                             </select>
                             <button type="submit">Submit</button>
                         </form>

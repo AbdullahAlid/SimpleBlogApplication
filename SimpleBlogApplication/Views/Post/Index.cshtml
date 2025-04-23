@@ -4,11 +4,8 @@
     int prevIndex = index - 5;
     long userId = ViewBag.userId??0;
     bool isFilterablePage = ViewBag.isFilterable ?? false;
-    bool isSpecificFilter = ViewBag.specificFilter ?? false;    
-    if (isFilterablePage)
-    {
-        string page = "own";
-    }
+    bool isSpecificFilter = ViewBag.specificFilter ?? false;  
+    string message = (string)TempData["Message"] ?? "";
 }
 <div class="container mb80">
     <div class="page-timeline">
@@ -16,21 +13,35 @@
             <div class="vtimeline-icon">
                 <i class="fa fa-image"></i>
             </div>
-            @if (isFilterablePage)
+            <span class="text-danger">@message</span>
+            @if (isFilterablePage == true)
             {
+                if (isSpecificFilter == true)
+                {
+                    Model.SelectedStatus = ViewBag.filteredValue;
+                    <form action="PostFilter" method="post">
 
-                <form action="PostFilter" method="post">
-                    <div class="row">
-                        <div class="col-2">
-                            <select name="filteredValue" asp-items="Html.GetEnumSelectList<Status>()">
-                                <option value="value">--Select Filtering Option--</option>
+                        <span>
+                            <select name="filteredValue" asp-for="SelectedStatus" asp-items="Html.GetEnumSelectList<Status>()">
                             </select>
-                        </div>
-                        <div class="col-4">
+                        </span>
+                        <span>
                             <button type="submit" class=" btn btn-sm btn-info">Filter</button>
-                        </div>
-                    </div>
-                </form>
+                        </span>        
+                    </form>
+                }
+                else{
+                    <form action="PostFilter" method="post">
+                        <span>
+                            <select name="filteredValue" asp-items="Html.GetEnumSelectList<Status>()">
+                            </select>
+                        </span>
+                        <span>
+                            <button type="submit" class=" btn btn-sm btn-info">Filter</button>
+                        </span>               
+                    </form>
+                }
+                
 
             }
 
@@ -41,25 +52,26 @@
             {
                 <div class="vtimeline-block">
                     <span class="vtimeline-date">@post.UploadDateTime.ToString("MMM dd, yyyy")</span><div class="vtimeline-content">
-                        <a href="#"><h3>@post.Title</h3></a>
+                        <h3 class="text-info-emphasis">@post.Title</h3>
                         <ul class="post-meta list-inline">
                             <li class="list-inline-item">
-                                <i class="fa fa-user-circle-o"></i> <a href="#">@{
+                                <i class="fa fa-user-circle-o"></i> <span>@{
                                         var a = $"{post.AppUser?.FirstName ?? ""} {post.AppUser?.LastName ?? ""}";
-                                    }@a</a>
+                                    }@a</span>
                             </li>
                             <li class="list-inline-item">
-                                <i class="fa fa-calendar-o"></i> <a href="#">@post.UploadDateTime.ToString("dd MMM, yyyy hh:mm")</a>
+                                <i class="fa fa-calendar-o"></i> <span>@post.UploadDateTime.ToString("dd MMM, yyyy hh:mm")</span>
                             </li>
                         </ul>
                         <p>
                             @post.Content
                         </p>
-                        @if (post.CurrentStatus == Status.Approved){
+                        @if (post.CurrentStatus == Status.Approved)
+                        {
                             long numberOfLike = post.SubmittedReactions.Where(r => r.Reaction == Reaction.Like).Count();
                             long numberOfDislike = post.SubmittedReactions.Where(r => r.Reaction == Reaction.Dislike).Count();
                             int numberOfComment = post.UploadedComments.Count();
-                            string pagetype = "";
+                            string pagetype = ViewBag.pageType ?? "";                            
                             if (isFilterablePage)
                             {
                                 pagetype = "own";

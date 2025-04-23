@@ -19,15 +19,17 @@ namespace SimpleBlogApplication.BLL.Services
         }
         public IEnumerable<SubmittedReaction> GetAllReaction()
         {
-            return _repository.GetReactions();
+            return _repository.GetAllReaction();
         }
 
         public void HandleReaction(int userId, int postId, Reaction type)
         {
             var checkAvailablity = GetAllReaction().FirstOrDefault(x => x.AppUserId == userId && x.PostId == postId && x.CommentId == null);
             SubmittedReaction reaction;
+
             if (checkAvailablity == null)
             {
+
                 if (type == Reaction.Like)
                 {
                     reaction = new SubmittedReaction()
@@ -38,6 +40,7 @@ namespace SimpleBlogApplication.BLL.Services
                     };
                     _repository.AddReaction(reaction);
                 }
+
                 if (type == Reaction.Dislike)
                 {
                     reaction = new SubmittedReaction()
@@ -61,6 +64,7 @@ namespace SimpleBlogApplication.BLL.Services
                     _repository.UpdateReaction(checkAvailablity);
                 }
             }
+
         }
     }
 }

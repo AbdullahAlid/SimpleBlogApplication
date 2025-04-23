@@ -17,7 +17,7 @@ namespace SimpleBlogApplication.DAL.Repositories
         {
             _context = context;
         }
-        public IEnumerable<SubmittedReaction> GetReactions()
+        public IEnumerable<SubmittedReaction> GetAllReaction()
         {
             return _context.SubmittedReactions;
         }

@@ -22,12 +22,25 @@ namespace SimpleBlogApplication.Controllers
             _signInManager = signInManager;
             _context = context;
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             long userId = Convert.ToInt64(_userManager.GetUserId(User));
             var users = _userManager.Users.Where(u=>u.Id != userId);
-            return View(users);
+            //var user = await _userManager.GetUsersForClaimAsync("Admin").ToList();
+            var usersToShow = _context.Roles.Where(r => r.Name != "Admin").Join(_context.UserRoles, r => r.Id, ur => ur.RoleId,(r,ur)=> new
+            {
+                UserId = ur.UserId
+            }).Join(_context.Users,us=>us.UserId, u=> u.Id, (us, u) => new{
+                user = u
+            });
+            var userList = new List<ApplicationUser>();
+            foreach(var individualUser in usersToShow)
+            {
+               userList.Add(individualUser.user);
+            }
+            return View(userList);
         }
 
         [AllowAnonymous]
@@ -123,26 +136,17 @@ namespace SimpleBlogApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                //fetch the User Details
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
-                    //If User does not exists, redirect to the Login Page
                     return RedirectToAction("Login", "Account");
                 }
 
-                // ChangePasswordAsync Method changes the user password
                 var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
-                // The new password did not meet the complexity rules or the current password is incorrect.
-                // Add these errors to the ModelState and rerender ChangePassword view
                 if (result.Succeeded)
                 {
-
-                    // Upon successfully changing the password refresh sign-in cookie
                     await _signInManager.RefreshSignInAsync(user);
-
-                    //Then redirect the user to the ChangePasswordConfirmation view
                     return RedirectToAction("ChangePasswordConfirmation", "Account");
                 }
                 else
@@ -153,7 +157,6 @@ namespace SimpleBlogApplication.Controllers
                     }
                 }
             }
-
             return View(model);
         }
 

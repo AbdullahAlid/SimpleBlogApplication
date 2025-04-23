@@ -10,4 +10,8 @@
     <ProjectReference Include="..\SimpleBlogApplication.DAL\SimpleBlogApplication.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BusinessModels\" />
+  </ItemGroup>
+
 </Project>

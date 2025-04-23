@@ -8,5 +8,6 @@ namespace SimpleBlogApplication.ViewModel
         public IEnumerable<Post> Blogs {  get; set; }
         public int StartFrom { get; set; }
         public long TotalBlogs { get; set; }
+        public Status? SelectedStatus { get; set; }
     }
 }

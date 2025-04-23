@@ -18,12 +18,12 @@ namespace SimpleBlogApplication.DAL.Repositories
             _context = context;
         }
 
-        public IEnumerable<Post> GetAll()
+        public IEnumerable<Post> GetAllBlog()
         {
-            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).OrderByDescending(p => p.Id).ToList();
+            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).OrderByDescending(p => p.Id);
         }
 
-        public Post? GetById(long id)
+        public Post? GetBlog(long id)
         {
             return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).FirstOrDefault(p=> p.Id == id);
         }
