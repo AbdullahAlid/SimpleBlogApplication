@@ -8,19 +8,20 @@ using SimpleBlogApplication.ViewModel;
 
 namespace SimpleBlogApplication.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     public class PostController : Controller
     {
         private readonly PostService _postService;
         private readonly ReactionService _reactionService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private bool _filtered;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public PostController(PostService postService, ReactionService reactionService, UserManager<ApplicationUser> userManager)
+        public PostController(PostService postService, ReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _postService = postService;
             _reactionService = reactionService;
             _userManager = userManager;
+            _signInManager = signInManager;          
         }
 
         [AllowAnonymous]
@@ -135,6 +136,7 @@ namespace SimpleBlogApplication.Controllers
 
         public IActionResult OwnBlogs(int skip = 0, int step = 5)
         {
+            var role = HttpContext.User.IsInRole("BlockedUser");
             long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             ViewData["userId"] = userId;
             ViewData["isFilterable"] = true;

@@ -30,6 +30,12 @@ namespace SimpleBlogApplication.DAL.Data
                     Id = 2,
                     Name = "User",
                     NormalizedName = "USER",
+                },
+                new ApplicationRole()
+                {
+                    Id = 3,
+                    Name = "BlockedUser",
+                    NormalizedName = "BLOCKEDUSER",
                 }
             );
                 

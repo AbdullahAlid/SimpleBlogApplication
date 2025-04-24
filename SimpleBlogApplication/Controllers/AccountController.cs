@@ -10,17 +10,15 @@ namespace SimpleBlogApplication.Controllers
 
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
+        private readonly UserManager<ApplicationUser> _userManager;        
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHasher, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
-            _passwordHasher = passwordHasher;
             _signInManager = signInManager;
-            _context = context;
+            _context = context;           
         }
 
         [Authorize(Roles = "Admin")]
@@ -43,13 +41,11 @@ namespace SimpleBlogApplication.Controllers
             return View(userList);
         }
 
-        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(User user)
         {
@@ -118,19 +114,19 @@ namespace SimpleBlogApplication.Controllers
             }
             return View(model);
         }
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "Post");
         }
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
@@ -160,7 +156,7 @@ namespace SimpleBlogApplication.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         [HttpGet]
         public IActionResult ChangePasswordConfirmation()
         {
@@ -172,23 +168,31 @@ namespace SimpleBlogApplication.Controllers
             return View();
         }
 
-        public IActionResult Block(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Block(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
             if(user != null)
             {
+                
                 user.ValidityStatus = UserValidityStatus.Blocked;
+                await _userManager.AddToRoleAsync(user, "BlockedUser");
+                await _userManager.RemoveFromRoleAsync(user, "User");
                 _context.Users.Update(user);
                 _context.SaveChanges();
             }          
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Unblock(int id)
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Unblock(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
                 user.ValidityStatus = UserValidityStatus.Unblocked;
+                await _userManager.RemoveFromRoleAsync(user, "BlockedUser");
+                await _userManager.AddToRoleAsync(user, "User");
                 _context.Users.Update(user);
                 _context.SaveChanges();
             }

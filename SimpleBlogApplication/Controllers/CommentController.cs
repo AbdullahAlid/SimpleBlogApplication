@@ -9,24 +9,27 @@ using SimpleBlogApplication.ViewModel;
 
 namespace SimpleBlogApplication.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     public class CommentController : Controller
     {
         private readonly CommentService _commentService;
         private readonly PostService _postService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public CommentController(CommentService commentService, PostService postService, UserManager<ApplicationUser> userManager)
+        public CommentController(CommentService commentService, PostService postService, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _commentService = commentService;
             _postService = postService;
             _userManager = userManager;
+            _context = context;
         }
 
         [AllowAnonymous]
         public IActionResult Create(int id)
         {
             var post = _postService.GetBlog(id);
+
             var postComment = new PostComment()
             {
                 PostTitle = post.Title,

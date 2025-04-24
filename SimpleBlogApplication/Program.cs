@@ -17,6 +17,7 @@ namespace SimpleBlogApplication
             builder.Services.AddControllersWithViews();
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+
             builder.Services.AddScoped<PostRepository>();
             builder.Services.AddScoped<PostService>();
 
