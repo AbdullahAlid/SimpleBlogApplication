@@ -13,6 +13,6 @@ namespace SimpleBlogApplication.DAL.Models
         public string LastName { get; set; } = string.Empty;
         public List<Post> ApprovedPost { get; set; }
         public List<Post> UploadedPost { get; set; }
-        public UserValidityStatus ValidityStatus { get; set; } = UserValidityStatus.Unblocked;
+        public UserValidityStatus ValidityStatus { get; set; } = UserValidityStatus.Active;
     }
 }

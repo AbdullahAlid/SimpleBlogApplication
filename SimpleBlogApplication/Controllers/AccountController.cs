@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBlogApplication.DAL.Data;
+using SimpleBlogApplication.DAL.Filters;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.ViewModel;
 
 namespace SimpleBlogApplication.Controllers
 {
-
+    [CheckUserValidity]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;        
@@ -114,19 +115,19 @@ namespace SimpleBlogApplication.Controllers
             }
             return View(model);
         }
-        [Authorize(Roles = "Admin, User")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "Post");
         }
-        [Authorize(Roles = "Admin, User")]
+        [Authorize]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin, User")]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
@@ -156,7 +157,7 @@ namespace SimpleBlogApplication.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin, User")]
+        [Authorize]
         [HttpGet]
         public IActionResult ChangePasswordConfirmation()
         {
@@ -190,7 +191,7 @@ namespace SimpleBlogApplication.Controllers
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
             if (user != null)
             {
-                user.ValidityStatus = UserValidityStatus.Unblocked;
+                user.ValidityStatus = UserValidityStatus.Active;
                 await _userManager.RemoveFromRoleAsync(user, "BlockedUser");
                 await _userManager.AddToRoleAsync(user, "User");
                 _context.Users.Update(user);

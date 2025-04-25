@@ -8,7 +8,7 @@ using SimpleBlogApplication.ViewModel;
 
 namespace SimpleBlogApplication.Controllers
 {
-    [Authorize(Roles = "Admin, User")]
+    [Authorize]
     public class PostController : Controller
     {
         private readonly PostService _postService;

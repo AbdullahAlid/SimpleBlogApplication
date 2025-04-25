@@ -12,8 +12,8 @@ using SimpleBlogApplication.DAL.Data;
 namespace SimpleBlogApplication.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250422105045_addColumnToAppUser")]
-    partial class addColumnToAppUser
+    [Migration("20250425040204_ProjectSetup")]
+    partial class ProjectSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
+using SimpleBlogApplication.DAL.Filters;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.ViewModel;
 
 namespace SimpleBlogApplication.Controllers
 {
-    [Authorize(Roles = "Admin, User")]
+    [CheckUserValidity]
+    [Authorize]
     public class CommentController : Controller
     {
         private readonly CommentService _commentService;
