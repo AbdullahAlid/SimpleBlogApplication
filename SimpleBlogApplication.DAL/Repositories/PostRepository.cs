@@ -25,7 +25,7 @@ namespace SimpleBlogApplication.DAL.Repositories
 
         public Post? GetBlog(long id)
         {
-            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).FirstOrDefault(p=> p.Id == id);
+            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).ThenInclude(p => p.AppUser).Include(p => p.SubmittedReactions).FirstOrDefault(p=> p.Id == id);
         }
 
         public void SaveBlog(Post post)

@@ -23,6 +23,7 @@
 
                         <span>
                             <select name="filteredValue" asp-for="SelectedStatus" asp-items="Html.GetEnumSelectList<Status>()">
+                                <option>--Select a Status--</option>
                             </select>
                         </span>
                         <span>
@@ -34,6 +35,7 @@
                     <form action="PostFilter" method="post">
                         <span>
                             <select name="filteredValue" asp-items="Html.GetEnumSelectList<Status>()">
+                                <option>--Select a Status--</option>
                             </select>
                         </span>
                         <span>

@@ -8,7 +8,7 @@ namespace SimpleBlogApplication.DAL.Models
 {
     public enum UserValidityStatus
     {
-        Active,
+        Active = 1,
         Blocked
     }
 }

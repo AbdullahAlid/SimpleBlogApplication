@@ -13,13 +13,13 @@ namespace SimpleBlogApplication.DAL.Models
         public long Id { get; set; }
         [Required]
         public string CommentText { get; set; }
-        public DateTime CommentDateTime { get; set; }
-        
+        public DateTime CommentDateTime { get; set; } 
         public long? PostId { get; set; }
         [ForeignKey("PostId")]
         public Post? Post { get; set; }        
         public long? AppUserId { get; set; }
         [ForeignKey("AppUserId")]
-        public ApplicationUser? AppUser { get; set; }        
+        public ApplicationUser? AppUser { get; set; }
+        
     }
 }

@@ -61,9 +61,7 @@
                 <div class="mt-2">
                     @foreach (var comment in Model.Comments.ToList())
                     {
-                        long userId = (long)comment.AppUserId;
-                        ApplicationUser user = UserManager.Users.FirstOrDefault(u => u.Id == userId);
-                        string name = $"{user.FirstName} {user.LastName}";
+                        string name = $"{comment.AppUser.FirstName} {comment.AppUser.LastName}";
                         
                         <div class="d-flex flex-row p-3">
                             <div class="w-100">

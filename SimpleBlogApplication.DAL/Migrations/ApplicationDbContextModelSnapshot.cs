@@ -275,7 +275,7 @@ namespace SimpleBlogApplication.DAL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("SimpleBlogApplication.DAL.Models.Post", b =>
@@ -312,7 +312,7 @@ namespace SimpleBlogApplication.DAL.Migrations
 
                     b.HasIndex("ApproverId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("SimpleBlogApplication.DAL.Models.SubmittedReaction", b =>
@@ -343,7 +343,7 @@ namespace SimpleBlogApplication.DAL.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("SubmittedReactions");
+                    b.ToTable("SubmittedReactions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>

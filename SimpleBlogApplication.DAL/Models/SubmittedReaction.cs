@@ -17,6 +17,7 @@ namespace SimpleBlogApplication.DAL.Models
         public long? AppUserId { get; set; }
         [ForeignKey(nameof(AppUserId))]
         public ApplicationUser? AppUser { get; set; }
+
         public long? CommentId { get; set; }
         [ForeignKey(nameof(CommentId))]
         public Comment? Comment { get; set; }

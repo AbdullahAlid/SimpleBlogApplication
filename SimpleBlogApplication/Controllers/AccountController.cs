@@ -30,16 +30,14 @@ namespace SimpleBlogApplication.Controllers
             //var user = await _userManager.GetUsersForClaimAsync("Admin").ToList();
             var usersToShow = _context.Roles.Where(r => r.Name != "Admin").Join(_context.UserRoles, r => r.Id, ur => ur.RoleId,(r,ur)=> new
             {
-                UserId = ur.UserId
+                UserId = ur.UserId,
+                roleName = r.Name
             }).Join(_context.Users,us=>us.UserId, u=> u.Id, (us, u) => new{
-                user = u
-            });
-            var userList = new List<ApplicationUser>();
-            foreach(var individualUser in usersToShow)
-            {
-               userList.Add(individualUser.user);
-            }
-            return View(userList);
+                user = u,
+                role = us.roleName
+            }).Select(u => new UserWithRole { User = u.user, Role = u.role});
+            
+            return View(usersToShow);
         }
 
         public IActionResult Register()
@@ -177,8 +175,6 @@ namespace SimpleBlogApplication.Controllers
             {
                 
                 user.ValidityStatus = UserValidityStatus.Blocked;
-                await _userManager.AddToRoleAsync(user, "BlockedUser");
-                await _userManager.RemoveFromRoleAsync(user, "User");
                 _context.Users.Update(user);
                 _context.SaveChanges();
             }          
@@ -192,8 +188,6 @@ namespace SimpleBlogApplication.Controllers
             if (user != null)
             {
                 user.ValidityStatus = UserValidityStatus.Active;
-                await _userManager.RemoveFromRoleAsync(user, "BlockedUser");
-                await _userManager.AddToRoleAsync(user, "User");
                 _context.Users.Update(user);
                 _context.SaveChanges();
             }

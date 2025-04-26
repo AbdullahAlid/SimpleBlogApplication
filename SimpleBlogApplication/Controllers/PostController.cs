@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
+using SimpleBlogApplication.DAL.Filters;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.ViewModel;
 
 namespace SimpleBlogApplication.Controllers
 {
+    [CheckUserValidity]
     [Authorize]
     public class PostController : Controller
     {
@@ -113,7 +115,7 @@ namespace SimpleBlogApplication.Controllers
         [HttpPost]
         public IActionResult Approval(long id, Status status)
         {
-            if(status == Status.Select)
+            if(status != Status.Pending && status != Status.Approved && status != Status.Rejected)
             {
                 TempData["Id"] = (int)id;
                 TempData["selectPlease"] = "Please Select An option";
@@ -158,7 +160,7 @@ namespace SimpleBlogApplication.Controllers
 
         public IActionResult FilteredBlogs(Status filteredValue, int skip = 0, int step = 5)
         {
-            if(filteredValue == Status.Select)
+            if(filteredValue != Status.Pending && filteredValue != Status.Approved && filteredValue != Status.Rejected)
             {
                 TempData["Message"] = "Please Select a Status to Filter";
                 return RedirectToAction(nameof(OwnBlogs));

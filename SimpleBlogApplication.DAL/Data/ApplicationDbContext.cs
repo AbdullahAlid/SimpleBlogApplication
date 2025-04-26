@@ -23,7 +23,7 @@ namespace SimpleBlogApplication.DAL.Data
                 {
                     Id = 1,
                     Name = "Admin",
-                    NormalizedName = "ADMIN",                  
+                    NormalizedName = "ADMIN",
                 },
                 new ApplicationRole()
                 {
@@ -32,14 +32,16 @@ namespace SimpleBlogApplication.DAL.Data
                     NormalizedName = "USER",
                 }
             );
-                
 
-            
+
+
             builder.Entity<Post>().HasOne(x => x.AppUser).WithMany(x => x.UploadedPost).HasForeignKey(x => x.AppUserId).OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Entity<Post>().HasOne(x => x.Approver).WithMany(x => x.ApprovedPost).HasForeignKey(x => x.ApproverId).OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Entity<Comment>().HasOne(x => x.Post).WithMany(x => x.UploadedComments).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<Comment>().HasOne(x => x.AppUser).WithMany(x => x.Comments).HasForeignKey(x => x.AppUserId).OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Entity<SubmittedReaction>().HasOne(x => x.Post).WithMany(x => x.SubmittedReactions).HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.ClientSetNull);
         }

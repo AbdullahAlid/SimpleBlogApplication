@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model IEnumerable<UserWithRole>
 @{
 	ViewData["Title"] = "User List";
 }
@@ -9,7 +9,8 @@
             <td>First Name</td>
             <td>Last Name</td>
             <td>Email</td>
-            <td>Validity Status</td>
+            <td>Role</td>
+            <td>Validity Status</td>            
             <td>Action</td>
         </tr>
     </thead>
@@ -17,16 +18,17 @@
         @foreach (var user in Model)
         {
             <tr>
-                <td>@user.FirstName</td>
-                <td>@user.LastName</td>
-                <td>@user.Email</td>
-                <td>@user.ValidityStatus</td>
+                <td>@user.User.FirstName</td>
+                <td>@user.User.LastName</td>
+                <td>@user.User.Email</td>
+                <td>@user.Role</td>
+                <td>@user.User.ValidityStatus</td>                
                 <td>
-                    @if(user.ValidityStatus == UserValidityStatus.Unblocked){
-                        <a class="btn btn-danger btn-sm" asp-controller="Account" asp-action="Block" asp-route-id="@user.Id">Block</a>
+                    @if(user.User.ValidityStatus == UserValidityStatus.Active){
+                        <a class="btn btn-danger btn-sm" asp-controller="Account" asp-action="Block" asp-route-id="@user.User.Id">Block</a>
                     }
                     else{
-                        <a class="btn btn-success btn-sm" asp-controller="Account" asp-action="Unblock" asp-route-id="@user.Id">Unblock</a>
+                        <a class="btn btn-success btn-sm" asp-controller="Account" asp-action="Unblock" asp-route-id="@user.User.Id">Unblock</a>
                     }                   
                 </td>
             </tr>

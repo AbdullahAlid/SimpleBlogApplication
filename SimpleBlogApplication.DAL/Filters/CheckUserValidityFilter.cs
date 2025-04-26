@@ -22,20 +22,19 @@ namespace SimpleBlogApplication.DAL.Filters
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             
-        var user = context.HttpContext.User;
+            var user = context.HttpContext.User;
 
-        if (user.Identity?.IsAuthenticated == true)
-        {
-            var userId = _userManager.GetUserId(user);
-            var appUser = await _userManager.FindByIdAsync(userId);
-
-            if (appUser == null || appUser.ValidityStatus == UserValidityStatus.Blocked)
+            if (user.Identity?.IsAuthenticated == true)
             {
-                await _signInManager.SignOutAsync();
-                context.Result = new RedirectToActionResult("Login", "Account", new {});
-            }
-        }
-            
+                var userId = _userManager.GetUserId(user);
+                var appUser = await _userManager.FindByIdAsync(userId);
+
+                if (appUser == null || appUser.ValidityStatus == UserValidityStatus.Blocked)
+                {
+                    await _signInManager.SignOutAsync();
+                    context.Result = new RedirectToActionResult("Login", "Account", new {});
+                }
+            }           
         }
     }
 }
