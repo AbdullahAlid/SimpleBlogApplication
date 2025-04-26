@@ -70,9 +70,17 @@ namespace SimpleBlogApplication.Controllers
         [HttpPost]
         public IActionResult Create([Bind("Title, Content")] Post post)
         {
-            post.AppUserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
-            _postService.SaveBlog(post);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                post.AppUserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+                _postService.SaveBlog(post);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(post);
+            }
+            
         }
 
         public IActionResult ReactionHandler(int id, Reaction type, string page = "")

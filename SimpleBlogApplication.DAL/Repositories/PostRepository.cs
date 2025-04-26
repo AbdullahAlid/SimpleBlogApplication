@@ -30,6 +30,7 @@ namespace SimpleBlogApplication.DAL.Repositories
 
         public void SaveBlog(Post post)
         {
+
             _context.Posts.Add(post);
             _context.SaveChanges();
         }  

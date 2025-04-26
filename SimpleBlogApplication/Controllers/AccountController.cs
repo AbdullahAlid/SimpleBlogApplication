@@ -39,12 +39,13 @@ namespace SimpleBlogApplication.Controllers
             
             return View(usersToShow);
         }
-
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(User user)
         {
@@ -80,7 +81,8 @@ namespace SimpleBlogApplication.Controllers
             }
             return View(user);
         }
-        
+
+        [AllowAnonymous]
         public IActionResult Login(string returnUrl = "/")
         {
             LoginViewModel login = new LoginViewModel();
@@ -88,6 +90,7 @@ namespace SimpleBlogApplication.Controllers
             return View(login);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -113,12 +116,14 @@ namespace SimpleBlogApplication.Controllers
             }
             return View(model);
         }
+
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "Post");
         }
+
         [Authorize]
         public IActionResult ChangePassword()
         {
@@ -162,6 +167,7 @@ namespace SimpleBlogApplication.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult BlockedUser()
         {
             return View();

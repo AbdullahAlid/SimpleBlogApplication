@@ -51,6 +51,7 @@
 
                 </div>
                 <form asp-action="Create" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="mt-3 d-flex flex-row align-items-center p-3 form-color">
                         <input type="hidden" asp-for="PostId" valu e="@Model.PostId" />
                         <input type="text" asp-for="CommentText" class="form-control" placeholder="Enter your comment...">&nbsp;
@@ -81,3 +82,9 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
