@@ -19,8 +19,15 @@ namespace SimpleBlogApplication.DAL.Repositories
 
         public void AddComment(Comment comment)
         {
-            _context.Comments.Add(comment);
-            _context.SaveChanges();
+            try
+            {
+                _context.Comments.Add(comment);
+                _context.SaveChanges();
+            }
+            catch (Exception) 
+            {
+                throw;
+            }
         }
     }
 }

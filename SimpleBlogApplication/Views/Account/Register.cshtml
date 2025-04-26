@@ -1,11 +1,15 @@
 ﻿@model User
 @{
     ViewData["Title"] = "Registration";
+    string message = (string)ViewData["Message"] ?? "";
 }
+
+
 <div class="row">
     <div class="col-4"></div>
     <div class="col-4 pt-4">
         <h1 class="bg-info text-white text-center">Create User</h1>
+        <p class="text-danger">@message</p>
         <div asp-validation-summary="All" class="text-danger"></div>
 
         <form method="post">

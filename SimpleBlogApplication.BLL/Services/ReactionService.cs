@@ -19,50 +19,65 @@ namespace SimpleBlogApplication.BLL.Services
         }
         public IEnumerable<SubmittedReaction> GetAllReaction()
         {
-            return _repository.GetAllReaction();
+            try
+            {
+                return _repository.GetAllReaction();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         public void HandleReaction(int userId, int postId, Reaction type)
         {
-            var checkAvailablity = GetAllReaction().FirstOrDefault(x => x.AppUserId == userId && x.PostId == postId && x.CommentId == null);
-            SubmittedReaction reaction;
-
-            if (checkAvailablity == null)
+            try
             {
+                var checkAvailablity = GetAllReaction().FirstOrDefault(x => x.AppUserId == userId && x.PostId == postId && x.CommentId == null);
+                SubmittedReaction reaction;
 
-                if (type == Reaction.Like)
+                if (checkAvailablity == null)
                 {
-                    reaction = new SubmittedReaction()
-                    {
-                        PostId = postId,
-                        AppUserId = userId,
-                        Reaction = DAL.Models.Reaction.Like
-                    };
-                    _repository.AddReaction(reaction);
-                }
 
-                if (type == Reaction.Dislike)
-                {
-                    reaction = new SubmittedReaction()
+                    if (type == Reaction.Like)
                     {
-                        PostId = postId,
-                        AppUserId = userId,
-                        Reaction = DAL.Models.Reaction.Dislike
-                    };
-                    _repository.AddReaction(reaction);
-                }
-            }
-            else
-            {
-                if (checkAvailablity.Reaction == type)
-                {
-                    _repository.RemoveReaction(checkAvailablity);
+                        reaction = new SubmittedReaction()
+                        {
+                            PostId = postId,
+                            AppUserId = userId,
+                            Reaction = DAL.Models.Reaction.Like
+                        };
+                        _repository.AddReaction(reaction);
+                    }
+
+                    if (type == Reaction.Dislike)
+                    {
+                        reaction = new SubmittedReaction()
+                        {
+                            PostId = postId,
+                            AppUserId = userId,
+                            Reaction = DAL.Models.Reaction.Dislike
+                        };
+                        _repository.AddReaction(reaction);
+                    }
                 }
                 else
                 {
-                    checkAvailablity.Reaction = type;
-                    _repository.UpdateReaction(checkAvailablity);
+                    if (checkAvailablity.Reaction == type)
+                    {
+                        _repository.RemoveReaction(checkAvailablity);
+                    }
+                    else
+                    {
+                        checkAvailablity.Reaction = type;
+                        _repository.UpdateReaction(checkAvailablity);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
         }

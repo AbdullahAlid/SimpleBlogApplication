@@ -19,24 +19,55 @@ namespace SimpleBlogApplication.DAL.Repositories
         }
         public IEnumerable<SubmittedReaction> GetAllReaction()
         {
-            return _context.SubmittedReactions;
+            try
+            {
+                return _context.SubmittedReactions;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         public void AddReaction(SubmittedReaction reaction)
         {
-            _context.SubmittedReactions.Add(reaction);
-            _context.SaveChanges();
+            try
+            {
+                _context.SubmittedReactions.Add(reaction);
+                _context.SaveChanges();
+            }
+            catch (Exception) 
+            { 
+                throw; 
+            }
+
+            
         }
         public void UpdateReaction(SubmittedReaction reaction)
         {
-            _context.SubmittedReactions.Update(reaction);
-            _context.SaveChanges();
+            try
+            {
+                _context.SubmittedReactions.Update(reaction);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void RemoveReaction(SubmittedReaction reaction)
         {
-            _context.SubmittedReactions.Remove(reaction);
-            _context.SaveChanges();
+            try
+            {
+                _context.SubmittedReactions.Remove(reaction);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -20,33 +20,70 @@ namespace SimpleBlogApplication.BLL.Services
 
         public void SaveBlog(Post post)
         {
-            post.UploadDateTime = DateTime.Now;
-            _postRepository.SaveBlog(post);
-            
+            try
+            {
+                post.UploadDateTime = DateTime.Now;
+                _postRepository.SaveBlog(post);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         public IEnumerable<Post> GetAllBlog()
         {
-            return _postRepository.GetAllBlog();
+            try
+            {
+                return _postRepository.GetAllBlog();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         public Post? GetBlog(long id) 
         {
-            return _postRepository.GetBlog(id);
+            try
+            {
+                return _postRepository.GetBlog(id);
+            }
+            catch (Exception) 
+            {
+                throw;
+            }
+            
         }
 
         public void UpdatePost(long id, Status status, long userId)
         {
-            var post = GetBlog(id);
-            post.CurrentStatus = status;
-            post.ApproverId = userId;
-            _postRepository.UpdatePost(post);
+            try
+            {
+                var post = GetBlog(id);
+                post.CurrentStatus = status;
+                post.ApproverId = userId;
+                _postRepository.UpdatePost(post);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         public IEnumerable<Post> GetTopFiveBlogs()
         {
-            var posts = GetAllBlog().OrderByDescending(p => (p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count())).Take(5);
-            return posts;
+            try
+            {
+                var posts = GetAllBlog().OrderByDescending(p => (p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count())).Take(5);
+                return posts;
+            }
+            catch (Exception) 
+            {
+                throw;
+            }       
         }
         
     }

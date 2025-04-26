@@ -4,6 +4,7 @@
     int prevIndex = index - 5;
     string message = (string)TempData["selectPlease"] ?? "";
     var postId = TempData["Id"] ?? ViewData["Id"];
+    string ErrorMessage = (string)TempData["Message"] ?? "";
 }
 <div class="container mb80">
     <div class="page-timeline">
@@ -21,7 +22,7 @@
             <div class="vtimeline-icon">
                 <i class="fa fa-image"></i>
             </div>            
-
+            <p class="text-danger">@ErrorMessage</p>
             @foreach (Post post in Model.Blogs)
             {
                 <div class="vtimeline-block">

@@ -19,14 +19,21 @@ namespace SimpleBlogApplication.BLL.Services
 
         public void AddComment(long userId, long postId, string comment)
         {
-            var submittedComment = new Comment()
+            try
             {
-                CommentText = comment,
-                CommentDateTime = DateTime.Now,
-                AppUserId = userId,
-                PostId = postId,
-            };
-            _commentRepository.AddComment(submittedComment);
+                var submittedComment = new Comment()
+                {
+                    CommentText = comment,
+                    CommentDateTime = DateTime.Now,
+                    AppUserId = userId,
+                    PostId = postId,
+                };
+                _commentRepository.AddComment(submittedComment);
+            }
+            catch(Exception) 
+            {
+                throw;
+            }            
         }
     }
 }

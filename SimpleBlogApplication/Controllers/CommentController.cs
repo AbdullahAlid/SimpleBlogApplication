@@ -32,25 +32,46 @@ namespace SimpleBlogApplication.Controllers
         {
             var post = _postService.GetBlog(id);
 
-            var postComment = new PostComment()
+            try
             {
-                PostTitle = post.Title,
-                PostBody = post.Content,
-                PostId = post.Id,
-                Blogger = $"{post.AppUser?.FirstName ?? ""} {post.AppUser?.LastName ?? ""}",
-                Reactions = post.SubmittedReactions ?? new List<SubmittedReaction>(),
-                Comments = post.UploadedComments.OrderByDescending(o => o.Id),
-                UserId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User))
-            };
-            return View(postComment);
+                if(post != null)
+                {
+                    var postComment = new PostComment()
+                    {
+                        PostTitle = post.Title,
+                        PostBody = post.Content,
+                        PostId = post.Id,
+                        Blogger = $"{post.AppUser?.FirstName ?? ""} {post.AppUser?.LastName ?? ""}",
+                        Reactions = post.SubmittedReactions ?? new List<SubmittedReaction>(),
+                        Comments = post.UploadedComments.OrderByDescending(o => o.Id),
+                        UserId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User))
+                    };
+                    return View(postComment);
+                }
+                return RedirectToAction(nameof(Index), nameof(Post));
+            }
+            catch (Exception)
+            {
+                TempData["Message"] = "The post you requested wasn't found!";
+                return RedirectToAction(nameof(Index), nameof(Post));
+            }
         }
 
         [HttpPost]
         public IActionResult Create([Bind("CommentText, PostId")] PostComment post)
         {
-            long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
-            _commentService.AddComment(userId, post.PostId, post.CommentText);
-            return RedirectToAction(nameof(Create), new { id = post.PostId });
+            try
+            {
+                long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
+                _commentService.AddComment(userId, post.PostId, post.CommentText);
+                return RedirectToAction(nameof(Create), new { id = post.PostId });
+            }
+            catch
+            {
+                TempData["Message"] = "Something went wrong";
+                return RedirectToAction(nameof(Create), new { id = post.PostId });
+            }
+            
         }
     }
 }

@@ -6,6 +6,7 @@
     bool isFilterablePage = ViewBag.isFilterable ?? false;
     bool isSpecificFilter = ViewBag.specificFilter ?? false;  
     string message = (string)TempData["Message"] ?? "";
+
 }
 <div class="container mb80">
     <div class="page-timeline">
@@ -13,7 +14,7 @@
             <div class="vtimeline-icon">
                 <i class="fa fa-image"></i>
             </div>
-            <span class="text-danger">@message</span>
+            <p class="text-danger">@message</p>
             @if (isFilterablePage == true)
             {
                 if (isSpecificFilter == true)

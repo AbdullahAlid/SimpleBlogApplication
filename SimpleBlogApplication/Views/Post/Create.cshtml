@@ -1,11 +1,13 @@
 ﻿@model Post
 @{
 	ViewData["Title"] = "Create";
+    string message = (string)TempData["Message"] ?? "";
 }
 
 <div class="row">
     <div class="col-md-8 mx-auto rounded border p-3">
         <h2 class="text-center mb-5">Create Blog</h2>
+        <p class="text-danger">@message</p>
 
 
         <form asp-action="Create" method="post">

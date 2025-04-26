@@ -20,25 +20,55 @@ namespace SimpleBlogApplication.DAL.Repositories
 
         public IEnumerable<Post> GetAllBlog()
         {
-            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).OrderByDescending(p => p.Id);
+            try
+            {
+                return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).Include(p => p.SubmittedReactions).OrderByDescending(p => p.Id);
+            }
+            catch (Exception) 
+            {
+                throw;
+            }
         }
 
         public Post? GetBlog(long id)
         {
-            return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).ThenInclude(p => p.AppUser).Include(p => p.SubmittedReactions).FirstOrDefault(p=> p.Id == id);
+            try
+            {
+                return _context.Posts.Include(p => p.AppUser).Include(p => p.UploadedComments).ThenInclude(p => p.AppUser).Include(p => p.SubmittedReactions).FirstOrDefault(p => p.Id == id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         public void SaveBlog(Post post)
         {
-
-            _context.Posts.Add(post);
-            _context.SaveChanges();
+            try
+            {
+                _context.Posts.Add(post);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+           
         }  
         
         public void UpdatePost(Post post)
         {
-            _context.Posts.Update(post);
-            _context.SaveChanges();
+            try
+            {
+                _context.Posts.Update(post);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
     }
 }

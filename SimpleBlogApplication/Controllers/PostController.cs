@@ -52,16 +52,27 @@ namespace SimpleBlogApplication.Controllers
         public IActionResult Index(int skip = 0, int step = 5)
         {
             ViewData["userId"] = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
-            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step);
-            var blogList = new BlogList()
+            try
             {
-                Blogs = posts,
-                StartFrom = skip,
-                TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
-            };
-            return View(blogList);
+                var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step);
+                var blogList = new BlogList()
+                {
+                    Blogs = posts,
+                    StartFrom = skip,
+                    TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
+                };
+                return View(blogList);
+            }
+            catch
+            {
+                TempData["Message"] = "Something went wrong!";
+                return View();
+            }
+            
+            
+            
         }
-
+        
         public IActionResult Create()
         {
             return View();
@@ -73,7 +84,16 @@ namespace SimpleBlogApplication.Controllers
             if (ModelState.IsValid)
             {
                 post.AppUserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
-                _postService.SaveBlog(post);
+                try
+                {
+                    _postService.SaveBlog(post);
+                }
+                catch(Exception)
+                {
+                    TempData["Message"] = "Something went worng";
+                    return View();
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -86,37 +106,49 @@ namespace SimpleBlogApplication.Controllers
         public IActionResult ReactionHandler(int id, Reaction type, string page = "")
         {
             int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
-            if(page == "TopFive")
+            try 
             {
                 _reactionService.HandleReaction(userId, id, type);
+            }
+            catch (Exception)
+            {
+                TempData["Message"] = "Something went wrong";
+            }            
+            if (page == "TopFive")
+            {                
                 return RedirectToAction(nameof(TopBlogs));
             }
             if (page == "own")
             {
-                _reactionService.HandleReaction(userId, id, type);
                 return RedirectToAction(nameof(OwnBlogs));
             }
             if (page == "create")
             {
-                _reactionService.HandleReaction(userId, id, type);
                 return RedirectToAction(nameof(Create),nameof(Comment), new {id = id});
-            }                      
-            _reactionService.HandleReaction(userId, id, type);            
+            }                                
             return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Admin")]
         public IActionResult PendingBlogs(int skip = 0, int step = 5)
         {
-            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Skip(skip).Take(step);
-            ViewData["Id"] = 0;
-            var blogList = new BlogList()
+            try
             {
-                Blogs = posts,
-                StartFrom = skip,
-                TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Count()
-            };
-            return View(blogList);
+                var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Skip(skip).Take(step);
+                ViewData["Id"] = 0;
+                var blogList = new BlogList()
+                {
+                    Blogs = posts,
+                    StartFrom = skip,
+                    TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Count()
+                };
+                return View(blogList);
+            }
+            catch(Exception)
+            {
+                TempData["Message"] = "Something went worng";
+                return View();
+            }
         }
 
         [Authorize(Roles = "Admin")]
@@ -130,8 +162,17 @@ namespace SimpleBlogApplication.Controllers
                 return RedirectToAction(nameof(PendingBlogs));
             }
             long userId = Convert.ToInt64(_userManager.GetUserId(User));
-            _postService.UpdatePost(id, status, userId);
-            return RedirectToAction(nameof(PendingBlogs));
+            try
+            {
+                _postService.UpdatePost(id, status, userId);
+                return RedirectToAction(nameof(PendingBlogs));
+            }
+            catch(Exception)
+            {
+                TempData["Message"] = "Something went wrong!";
+                return RedirectToAction(nameof(PendingBlogs));
+            }
+            
         }
 
         public IActionResult LoadNextPending(int startfrom)
@@ -150,14 +191,23 @@ namespace SimpleBlogApplication.Controllers
             long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             ViewData["userId"] = userId;
             ViewData["isFilterable"] = true;
-            var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Skip(skip).Take(step);
-            var blogList = new BlogList()
+            try
             {
-                Blogs = posts,
-                StartFrom = skip,
-                TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Count()
-            };
-            return View(nameof(Index), blogList);
+                var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Skip(skip).Take(step);
+                var blogList = new BlogList()
+                {
+                    Blogs = posts,
+                    StartFrom = skip,
+                    TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Count()
+                };
+                return View(nameof(Index), blogList);
+            }
+            catch(Exception)
+            {
+                TempData["Message"] = "Something went wrong!";
+                return View(nameof(Index));
+            }
+            
         }
 
         [HttpPost]
@@ -178,14 +228,22 @@ namespace SimpleBlogApplication.Controllers
             ViewData["isFilterable"] = true;
             ViewData["specificFilter"] = true;
             ViewData["filteredValue"] = filteredValue;
-            var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Skip(skip).Take(step);
-            var blogList = new BlogList()
+            try
             {
-                Blogs = posts,
-                StartFrom = skip,
-                TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Count()
-            };
-            return View(nameof(Index), blogList);
+                var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Skip(skip).Take(step);
+                var blogList = new BlogList()
+                {
+                    Blogs = posts,
+                    StartFrom = skip,
+                    TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Count()
+                };
+                return View(nameof(Index), blogList);
+            }
+            catch(Exception)
+            {
+                TempData["Message"] = "Something went wrong";
+                return View(nameof(Index));
+            }
         }
 
         public IActionResult LoadPrevStatusWise(int startfrom, Status status)
@@ -203,12 +261,21 @@ namespace SimpleBlogApplication.Controllers
             long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             ViewData["userId"] = userId;
             ViewData["pageType"] = "TopFive";
-            var posts = _postService.GetTopFiveBlogs();          
-            var blogList = new BlogList()
+            try
             {
-                Blogs = posts,
-            };
-            return View(nameof(Index), blogList);
+                var posts = _postService.GetTopFiveBlogs();
+                var blogList = new BlogList()
+                {
+                    Blogs = posts,
+                };
+                return View(nameof(Index), blogList);
+            }
+            catch (Exception)
+            {
+                TempData["Message"] = "Something went wrong";
+                return View(nameof(Index));
+            }
+
         }
     }
 }

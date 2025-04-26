@@ -26,18 +26,25 @@ namespace SimpleBlogApplication.Controllers
         public IActionResult Index()
         {
             long userId = Convert.ToInt64(_userManager.GetUserId(User));
-            var users = _userManager.Users.Where(u=>u.Id != userId);
-            //var user = await _userManager.GetUsersForClaimAsync("Admin").ToList();
-            var usersToShow = _context.Roles.Where(r => r.Name != "Admin").Join(_context.UserRoles, r => r.Id, ur => ur.RoleId,(r,ur)=> new
+            //var users = _userManager.Users.Where(u=>u.Id != userId);
+            try
             {
-                UserId = ur.UserId,
-                roleName = r.Name
-            }).Join(_context.Users,us=>us.UserId, u=> u.Id, (us, u) => new{
-                user = u,
-                role = us.roleName
-            }).Select(u => new UserWithRole { User = u.user, Role = u.role});
-            
-            return View(usersToShow);
+                var usersToShow = _context.Roles.Where(r => r.Name != "Admin").Join(_context.UserRoles, r => r.Id, ur => ur.RoleId, (r, ur) => new
+                {
+                    UserId = ur.UserId,
+                    roleName = r.Name
+                }).Join(_context.Users, us => us.UserId, u => u.Id, (us, u) => new {
+                    user = u,
+                    role = us.roleName
+                }).Select(u => new UserWithRole { User = u.user, Role = u.role });
+                return View(usersToShow);
+            }
+            catch(Exception)
+            {
+                ViewData["Message"] = "Something went wrong";
+                return View();
+            }
+                     
         }
         [AllowAnonymous]
         public IActionResult Register()
@@ -64,11 +71,28 @@ namespace SimpleBlogApplication.Controllers
                 {
                     if (_userManager.Users.ToList().Count == 1)
                     {
-                        await _userManager.AddToRoleAsync(appUser, "Admin");
+                        try{
+                            await _userManager.AddToRoleAsync(appUser, "Admin");
+                        }
+                        catch (Exception)
+                        {
+                            ViewData["Message"] = "Role not found";
+                            return View();
+                        }
+                        
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(appUser, "User");
+                        try
+                        {
+                            await _userManager.AddToRoleAsync(appUser, "User");
+                        }
+                        catch(Exception)
+                        {
+                            ViewData["Message"] = "Role not found";
+                            return View();
+                        }
+                        
                     }
                     await _signInManager.SignInAsync(appUser, false);
                     return RedirectToAction("Index", "Post");

@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<UserWithRole>
 @{
-	ViewData["Title"] = "User List";
+    ViewData["Title"] = "User List";
+    string message = (string)ViewData["Message"] ?? "";
 }
+
+<p class="text-danger">@message</p>
 
 <table class="table">
     <thead>

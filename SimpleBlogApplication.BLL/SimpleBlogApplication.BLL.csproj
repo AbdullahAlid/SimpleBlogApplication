@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleBlogApplication.DAL\SimpleBlogApplication.DAL.csproj" />
+    <Compile Remove="BusinessModels\**" />
+    <EmbeddedResource Remove="BusinessModels\**" />
+    <None Remove="BusinessModels\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessModels\" />
+    <ProjectReference Include="..\SimpleBlogApplication.DAL\SimpleBlogApplication.DAL.csproj" />
   </ItemGroup>
 
 </Project>
