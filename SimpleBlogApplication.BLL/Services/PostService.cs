@@ -77,7 +77,7 @@ namespace SimpleBlogApplication.BLL.Services
         {
             try
             {
-                var posts = GetAllBlog().OrderByDescending(p => (p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count())).Take(5);
+                var posts = _postRepository.GetAllBlog().OrderByDescending(p => (p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count())).Take(5);
                 return posts;
             }
             catch (Exception) 

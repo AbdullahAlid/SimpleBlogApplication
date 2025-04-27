@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.Filters;
@@ -54,23 +55,26 @@ namespace SimpleBlogApplication.Controllers
             ViewData["userId"] = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             try
             {
-                var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step);
+                var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step);               
                 var blogList = new BlogList()
                 {
                     Blogs = posts,
                     StartFrom = skip,
                     TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
                 };
+                
                 return View(blogList);
             }
-            catch
+            catch(Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong!";
                 return View();
             }
-            
-            
-            
+
+
+
+
         }
         
         public IActionResult Create()
@@ -88,8 +92,9 @@ namespace SimpleBlogApplication.Controllers
                 {
                     _postService.SaveBlog(post);
                 }
-                catch(Exception)
+                catch(Exception ex)
                 {
+                    Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                     TempData["Message"] = "Something went worng";
                     return View();
                 }
@@ -106,27 +111,33 @@ namespace SimpleBlogApplication.Controllers
         public IActionResult ReactionHandler(int id, Reaction type, string page = "")
         {
             int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
-            try 
+            try
             {
                 _reactionService.HandleReaction(userId, id, type);
+
+                if (page == "TopFive")
+                {
+                    return RedirectToAction(nameof(TopBlogs));
+                }
+
+                if (page == "own")
+                {
+                    return RedirectToAction(nameof(OwnBlogs));
+                }
+
+                if (page == "create")
+                {
+                    return RedirectToAction(nameof(Create), nameof(Comment), new { id = id });
+                }
+
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong";
-            }            
-            if (page == "TopFive")
-            {                
-                return RedirectToAction(nameof(TopBlogs));
+                return RedirectToAction(nameof(Index));
             }
-            if (page == "own")
-            {
-                return RedirectToAction(nameof(OwnBlogs));
-            }
-            if (page == "create")
-            {
-                return RedirectToAction(nameof(Create),nameof(Comment), new {id = id});
-            }                                
-            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Admin")]
@@ -144,8 +155,9 @@ namespace SimpleBlogApplication.Controllers
                 };
                 return View(blogList);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went worng";
                 return View();
             }
@@ -167,8 +179,9 @@ namespace SimpleBlogApplication.Controllers
                 _postService.UpdatePost(id, status, userId);
                 return RedirectToAction(nameof(PendingBlogs));
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong!";
                 return RedirectToAction(nameof(PendingBlogs));
             }
@@ -202,8 +215,9 @@ namespace SimpleBlogApplication.Controllers
                 };
                 return View(nameof(Index), blogList);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong!";
                 return View(nameof(Index));
             }
@@ -239,8 +253,9 @@ namespace SimpleBlogApplication.Controllers
                 };
                 return View(nameof(Index), blogList);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong";
                 return View(nameof(Index));
             }
@@ -270,8 +285,9 @@ namespace SimpleBlogApplication.Controllers
                 };
                 return View(nameof(Index), blogList);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong";
                 return View(nameof(Index));
             }

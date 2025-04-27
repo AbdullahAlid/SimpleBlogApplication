@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.Filters;
@@ -50,8 +51,9 @@ namespace SimpleBlogApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index), nameof(Post));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "The post you requested wasn't found!";
                 return RedirectToAction(nameof(Index), nameof(Post));
             }
@@ -66,8 +68,9 @@ namespace SimpleBlogApplication.Controllers
                 _commentService.AddComment(userId, post.PostId, post.CommentText);
                 return RedirectToAction(nameof(Create), new { id = post.PostId });
             }
-            catch
+            catch(Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong";
                 return RedirectToAction(nameof(Create), new { id = post.PostId });
             }

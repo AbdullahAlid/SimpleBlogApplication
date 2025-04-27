@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.Filters;
 using SimpleBlogApplication.DAL.Models;
@@ -21,7 +22,7 @@ namespace SimpleBlogApplication.Controllers
             _signInManager = signInManager;
             _context = context;           
         }
-
+        
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
@@ -39,8 +40,9 @@ namespace SimpleBlogApplication.Controllers
                 }).Select(u => new UserWithRole { User = u.user, Role = u.role });
                 return View(usersToShow);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
+                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 ViewData["Message"] = "Something went wrong";
                 return View();
             }
@@ -74,8 +76,9 @@ namespace SimpleBlogApplication.Controllers
                         try{
                             await _userManager.AddToRoleAsync(appUser, "Admin");
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                             ViewData["Message"] = "Role not found";
                             return View();
                         }
@@ -87,8 +90,9 @@ namespace SimpleBlogApplication.Controllers
                         {
                             await _userManager.AddToRoleAsync(appUser, "User");
                         }
-                        catch(Exception)
+                        catch(Exception ex)
                         {
+                            Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                             ViewData["Message"] = "Role not found";
                             return View();
                         }
@@ -133,7 +137,7 @@ namespace SimpleBlogApplication.Controllers
                 }
                 else
                 {
-                    // Handle failure
+                    
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }

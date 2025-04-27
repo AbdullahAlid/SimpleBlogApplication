@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.Models;
@@ -23,9 +24,11 @@ namespace SimpleBlogApplication
 
             builder.Services.AddScoped<ReactionRepository>();
             builder.Services.AddScoped<ReactionService>();
-
+            
             builder.Services.AddScoped<CommentRepository>();
             builder.Services.AddScoped<CommentService>();
+
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration)/*MinimumLevel.Information().WriteTo.Console()*/.CreateLogger();
 
 
             var app = builder.Build();
