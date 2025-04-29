@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleBlogApplication.BLL.IServices;
+using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.DAL.Repositories;
 
 namespace SimpleBlogApplication.BLL.Services
 {
-    public class CommentService
+    public class CommentService : ICommentService
     {
-        private readonly CommentRepository _commentRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public CommentService(CommentRepository commentRepository)
+        public CommentService(ICommentRepository commentRepository)
         {
             _commentRepository = commentRepository;
         }
@@ -34,6 +36,26 @@ namespace SimpleBlogApplication.BLL.Services
             {
                 throw;
             }            
+        }
+
+        public void DeleteComment(Comment comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Comment> GetAllComment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Post GetComment(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateComment(Comment comment)
+        {
+            throw new NotImplementedException();
         }
     }
 }

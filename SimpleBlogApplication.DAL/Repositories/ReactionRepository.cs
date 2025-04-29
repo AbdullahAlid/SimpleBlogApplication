@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlogApplication.DAL.Data;
+using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
 
 namespace SimpleBlogApplication.DAL.Repositories
 {
-    public class ReactionRepository
+    public class ReactionRepository : IReactionRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -40,10 +41,9 @@ namespace SimpleBlogApplication.DAL.Repositories
             catch (Exception) 
             { 
                 throw; 
-            }
-
-            
+            }   
         }
+
         public void UpdateReaction(SubmittedReaction reaction)
         {
             try
@@ -68,6 +68,11 @@ namespace SimpleBlogApplication.DAL.Repositories
             {
                 throw;
             }
+        }
+
+        public SubmittedReaction GetReaction(long id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -4,26 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SimpleBlogApplication.BLL.IServices;
+using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.DAL.Repositories;
 
 namespace SimpleBlogApplication.BLL.Services
 {
-    public class PostService
+    public class PostService : IPostService
     {
-        private readonly PostRepository _postRepository;
+        private readonly IPostRepository _postRepository;
 
-        public PostService(PostRepository postRepository)
+        public PostService(IPostRepository postRepository)
         {
             _postRepository = postRepository;
         }
 
-        public void SaveBlog(Post post)
+        public void AddBlog(Post post)
         {
             try
             {
                 post.UploadDateTime = DateTime.Now;
-                _postRepository.SaveBlog(post);
+                _postRepository.AddBlog(post);
             }
             catch(Exception)
             {
@@ -57,14 +59,14 @@ namespace SimpleBlogApplication.BLL.Services
             
         }
 
-        public void UpdatePost(long id, Status status, long userId)
+        public void UpdateBlog(long id, Status status, long userId)
         {
             try
             {
                 var post = GetBlog(id);
                 post.CurrentStatus = status;
                 post.ApproverId = userId;
-                _postRepository.UpdatePost(post);
+                _postRepository.UpdateBlog(post);
             }
             catch (Exception)
             {
@@ -85,6 +87,10 @@ namespace SimpleBlogApplication.BLL.Services
                 throw;
             }       
         }
-        
+
+        public void DeleteBlog(Post post)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

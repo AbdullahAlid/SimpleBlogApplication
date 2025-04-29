@@ -4,19 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SimpleBlogApplication.BLL.IServices;
+using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.DAL.Repositories;
 
 namespace SimpleBlogApplication.BLL.Services
 {
-    public class ReactionService
+    public class ReactionService : IReactionService
     {
-        private readonly ReactionRepository _repository;
+        private readonly IReactionRepository _repository;
 
-        public ReactionService(ReactionRepository repository) 
+        public ReactionService(IReactionRepository repository) 
         {
             _repository = repository;
         }
+
+        public void AddReaction(SubmittedReaction reaction)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<SubmittedReaction> GetAllReaction()
         {
             try
@@ -28,6 +36,11 @@ namespace SimpleBlogApplication.BLL.Services
                 throw;
             }
             
+        }
+
+        public SubmittedReaction GetReaction(long id)
+        {
+            throw new NotImplementedException();
         }
 
         public void HandleReaction(int userId, int postId, Reaction type)
@@ -80,6 +93,16 @@ namespace SimpleBlogApplication.BLL.Services
                 throw;
             }
 
+        }
+
+        public void RemoveReaction(SubmittedReaction reaction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateReaction(SubmittedReaction reaction)
+        {
+            throw new NotImplementedException();
         }
     }
 }

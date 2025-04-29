@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlogApplication.DAL.Data;
+using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
 
 namespace SimpleBlogApplication.DAL.Repositories
 {
-    public class PostRepository
+    public class PostRepository : IPostRepository
     {
         private readonly ApplicationDbContext _context;
 
         public PostRepository(ApplicationDbContext context)
         {
             _context = context;
-        }
+        }        
 
         public IEnumerable<Post> GetAllBlog()
         {
@@ -43,7 +44,12 @@ namespace SimpleBlogApplication.DAL.Repositories
             
         }
 
-        public void SaveBlog(Post post)
+        public Post GetBlog()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddBlog(Post post)
         {
             try
             {
@@ -57,7 +63,7 @@ namespace SimpleBlogApplication.DAL.Repositories
            
         }  
         
-        public void UpdatePost(Post post)
+        public void UpdateBlog(Post post)
         {
             try
             {
@@ -69,6 +75,11 @@ namespace SimpleBlogApplication.DAL.Repositories
                 throw;
             }
             
+        }
+
+        public void DeleteBlog(Post post)
+        {
+            throw new NotImplementedException();
         }
     }
 }

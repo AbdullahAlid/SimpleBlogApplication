@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimpleBlogApplication.DAL.Data;
+using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
 
 namespace SimpleBlogApplication.DAL.Repositories
 {
-    public class CommentRepository
+    public class CommentRepository : ICommentRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -28,6 +29,26 @@ namespace SimpleBlogApplication.DAL.Repositories
             {
                 throw;
             }
+        }
+
+        public void DeleteComment(Comment comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Comment> GetAllComment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Post GetComment(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateComment(Comment comment)
+        {
+            throw new NotImplementedException();
         }
     }
 }

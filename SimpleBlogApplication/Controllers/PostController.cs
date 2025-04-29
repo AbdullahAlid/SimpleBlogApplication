@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using SimpleBlogApplication.BLL.IServices;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.Filters;
@@ -14,12 +15,12 @@ namespace SimpleBlogApplication.Controllers
     [Authorize]
     public class PostController : Controller
     {
-        private readonly PostService _postService;
-        private readonly ReactionService _reactionService;
+        private readonly IPostService _postService;
+        private readonly IReactionService _reactionService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public PostController(PostService postService, ReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public PostController(IPostService postService, IReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _postService = postService;
             _reactionService = reactionService;
@@ -72,9 +73,6 @@ namespace SimpleBlogApplication.Controllers
                 return View();
             }
 
-
-
-
         }
         
         public IActionResult Create()
@@ -90,7 +88,7 @@ namespace SimpleBlogApplication.Controllers
                 post.AppUserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
                 try
                 {
-                    _postService.SaveBlog(post);
+                    _postService.AddBlog(post);
                 }
                 catch(Exception ex)
                 {
@@ -176,7 +174,7 @@ namespace SimpleBlogApplication.Controllers
             long userId = Convert.ToInt64(_userManager.GetUserId(User));
             try
             {
-                _postService.UpdatePost(id, status, userId);
+                _postService.UpdateBlog(id, status, userId);
                 return RedirectToAction(nameof(PendingBlogs));
             }
             catch(Exception ex)

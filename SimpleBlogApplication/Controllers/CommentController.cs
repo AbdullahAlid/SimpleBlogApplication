@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using SimpleBlogApplication.BLL.IServices;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.Filters;
@@ -15,12 +16,12 @@ namespace SimpleBlogApplication.Controllers
     [Authorize]
     public class CommentController : Controller
     {
-        private readonly CommentService _commentService;
-        private readonly PostService _postService;
+        private readonly ICommentService _commentService;
+        private readonly IPostService _postService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public CommentController(CommentService commentService, PostService postService, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public CommentController(ICommentService commentService, IPostService postService, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _commentService = commentService;
             _postService = postService;

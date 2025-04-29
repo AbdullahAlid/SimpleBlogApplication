@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using SimpleBlogApplication.BLL.IServices;
 using SimpleBlogApplication.BLL.Services;
 using SimpleBlogApplication.DAL.Data;
+using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.DAL.Repositories;
 
@@ -19,16 +21,16 @@ namespace SimpleBlogApplication
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
-            builder.Services.AddScoped<PostRepository>();
-            builder.Services.AddScoped<PostService>();
+            builder.Services.AddScoped<IPostRepository, PostRepository>();
+            builder.Services.AddScoped<IPostService, PostService>();
 
-            builder.Services.AddScoped<ReactionRepository>();
-            builder.Services.AddScoped<ReactionService>();
+            builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
+            builder.Services.AddScoped<IReactionService, ReactionService>();
             
-            builder.Services.AddScoped<CommentRepository>();
-            builder.Services.AddScoped<CommentService>();
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
 
-            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration)/*MinimumLevel.Information().WriteTo.Console()*/.CreateLogger();
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration)/*MinimumLevel.Information().WriteTo.Console().WriteTo.File("logs/myLog-.txt",rollingInterval; RollingInterval.Day)*/.CreateLogger();
 
 
             var app = builder.Build();
