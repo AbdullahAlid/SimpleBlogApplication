@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using SimpleBlogApplication.BLL.IServices;
 using SimpleBlogApplication.BLL.Services;
@@ -19,13 +21,17 @@ namespace SimpleBlogApplication.Controllers
         private readonly IReactionService _reactionService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IMemoryCache _cache;
+        private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+        private static List<string> cachedKeyNames = new List<string>();
 
-        public PostController(IPostService postService, IReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public PostController(IPostService postService, IReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMemoryCache cache)
         {
             _postService = postService;
             _reactionService = reactionService;
             _userManager = userManager;
-            _signInManager = signInManager;          
+            _signInManager = signInManager;
+            _cache = cache;
         }
 
         [AllowAnonymous]
@@ -51,19 +57,35 @@ namespace SimpleBlogApplication.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index(int skip = 0, int step = 5)
+        public async Task<IActionResult> Index(int skip = 0, int step = 5)
         {
+            var cacheKey = $"Posts: {skip}";
             ViewData["userId"] = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            
             try
             {
-                var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step);               
-                var blogList = new BlogList()
+
+                if (_cache.TryGetValue(cacheKey, out BlogList? blogList))
                 {
-                    Blogs = posts,
-                    StartFrom = skip,
-                    TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
-                };
-                
+                    return View(blogList);
+                }
+                else
+                {
+                    await semaphore.WaitAsync();
+                    var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step).ToList();
+                    
+                    blogList = new BlogList()
+                    {
+                        Blogs = posts,
+                        StartFrom = skip,
+                        TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
+                    };
+                    var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(300)).SetAbsoluteExpiration(TimeSpan.FromSeconds(3000)).SetPriority(CacheItemPriority.Normal);
+                    _cache.Set(cacheKey, blogList, cacheOptions);
+                    cachedKeyNames.Add(cacheKey);
+                    semaphore.Release();
+                }
+                var keys = cachedKeyNames;
                 return View(blogList);
             }
             catch(Exception ex)
@@ -174,6 +196,13 @@ namespace SimpleBlogApplication.Controllers
             long userId = Convert.ToInt64(_userManager.GetUserId(User));
             try
             {
+                if (status == Status.Approved)
+                {
+                    foreach(string key in cachedKeyNames)
+                    {
+                        _cache.Remove(key);
+                    }
+                }
                 _postService.UpdateBlog(id, status, userId);
                 return RedirectToAction(nameof(PendingBlogs));
             }

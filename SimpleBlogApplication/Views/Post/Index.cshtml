@@ -55,10 +55,11 @@
             {
                 <div class="vtimeline-block">
                     <span class="vtimeline-date">@post.UploadDateTime.ToString("MMM dd, yyyy")</span><div class="vtimeline-content">
-                        <h3 class="text-info-emphasis">@post.Title</h3>
+                        <h3 style=" font-family: 'Reenie Beanie', cursive;" class="text-info-emphasis">@post.Title</h3>
                         <ul class="post-meta list-inline">
                             <li class="list-inline-item">
-                                <i class="fa fa-user-circle-o"></i> <span>@{
+                                <i class="fa fa-user-circle-o"></i> <span style=" font-family: 'Reenie Beanie', cursive;">
+                                    @{
                                         var a = $"{post.AppUser?.FirstName ?? ""} {post.AppUser?.LastName ?? ""}";
                                     }@a</span>
                             </li>
