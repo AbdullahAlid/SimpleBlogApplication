@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using SimpleBlogApplication.BLL.IServices;
-using SimpleBlogApplication.BLL.Services;
-using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.Filters;
 using SimpleBlogApplication.DAL.Models;
 using SimpleBlogApplication.ViewModel;
@@ -59,37 +57,58 @@ namespace SimpleBlogApplication.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(int skip = 0, int step = 5)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             var cacheKey = $"Posts: {skip}";
             ViewData["userId"] = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
-            
+            string msg = "";
             try
-            {
-
+            {                
                 if (_cache.TryGetValue(cacheKey, out BlogList? blogList))
                 {
-                    return View(blogList);
+                    msg = "from cache";
+                    Log.Information($"Data is accessing from cache");
                 }
                 else
                 {
-                    await semaphore.WaitAsync();
-                    var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step).ToList();
-                    
-                    blogList = new BlogList()
+                    try
                     {
-                        Blogs = posts,
-                        StartFrom = skip,
-                        TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
-                    };
-                    var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(300)).SetAbsoluteExpiration(TimeSpan.FromSeconds(3000)).SetPriority(CacheItemPriority.Normal);
-                    _cache.Set(cacheKey, blogList, cacheOptions);
-                    cachedKeyNames.Add(cacheKey);
-                    semaphore.Release();
+                        await semaphore.WaitAsync();
+                        if (_cache.TryGetValue(cacheKey, out blogList))
+                        {
+                            msg = "from cache";
+                            Log.Information($"Data is accessing from cache");
+                        }
+                        else
+                        {
+
+                            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step).ToList();
+
+                            blogList = new BlogList()
+                            {
+                                Blogs = posts,
+                                StartFrom = skip,
+                                TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
+                            };
+                            var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(300)).SetAbsoluteExpiration(TimeSpan.FromSeconds(3600)).SetPriority(CacheItemPriority.Normal).SetSize(1);
+                            _cache.Set(cacheKey, blogList, cacheOptions);
+                            cachedKeyNames.Add(cacheKey);
+                        }
+                    }
+                    finally
+                    {
+                        semaphore.Release();
+                        msg = "from database";
+                    }
                 }
-                var keys = cachedKeyNames;
+                stopwatch.Stop();
+                var time = stopwatch.ElapsedMilliseconds;
+                Log.Information("Elapsed time {Time} ms when accessing {Msg}", time, msg);
                 return View(blogList);
             }
             catch(Exception ex)
             {
+                
                 Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong!";
                 return View();

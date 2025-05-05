@@ -1,11 +1,13 @@
 ﻿@model BlogList
 @{
-    int index = Model.StartFrom + 5;
-    int prevIndex = index - 5;
-    long userId = ViewBag.userId??0;
+    var index = Model.StartFrom + 5;
+    int? prevIndex = index - 5;
+    long userId = ViewBag.userId ?? 0;
     bool isFilterablePage = ViewBag.isFilterable ?? false;
-    bool isSpecificFilter = ViewBag.specificFilter ?? false;  
+    bool isSpecificFilter = ViewBag.specificFilter ?? false;
     string message = (string)TempData["Message"] ?? "";
+
+    
 
 }
 <div class="container mb80">

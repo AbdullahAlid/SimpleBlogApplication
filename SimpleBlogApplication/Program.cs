@@ -30,7 +30,11 @@ namespace SimpleBlogApplication
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<ICommentService, CommentService>();
 
+            builder.Services.AddMemoryCache(options => options.SizeLimit = 6);
+
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration)/*MinimumLevel.Information().WriteTo.Console().WriteTo.File("logs/myLog-.txt",rollingInterval; RollingInterval.Day)*/.CreateLogger();
+
+            builder.Host.UseSerilog();
 
 
             var app = builder.Build();
@@ -43,6 +47,7 @@ namespace SimpleBlogApplication
                 app.UseHsts();
             }
 
+            app.UseSerilogRequestLogging();
             app.UseHttpsRedirection();
             app.UseRouting();
 
