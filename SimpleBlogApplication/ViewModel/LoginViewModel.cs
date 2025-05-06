@@ -4,7 +4,7 @@ namespace SimpleBlogApplication.ViewModel
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; }
         [Required]
         [DataType(DataType.Password)]

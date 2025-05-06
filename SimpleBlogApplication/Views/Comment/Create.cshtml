@@ -10,6 +10,7 @@
             <div class="card">
                 <div class="d-flex flex-row p-3">
                     <div class="w-100">
+                        <h5 class="text-danger">@TempData["Message"]</h5>
                         <a asp-controller="Post" asp-action="Index">Back to the blogs list</a>
                         <h3>@Model.PostTitle</h3>
                         <p class="text-justify comment-text mb-0">@Model.PostBody</p>

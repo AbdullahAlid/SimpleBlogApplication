@@ -78,6 +78,7 @@ namespace SimpleBlogApplication.Controllers
                         }
                         catch (Exception ex)
                         {
+                            
                             Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                             ViewData["Message"] = "Role not found";
                             return View();
@@ -91,9 +92,9 @@ namespace SimpleBlogApplication.Controllers
                             await _userManager.AddToRoleAsync(appUser, "User");
                         }
                         catch(Exception ex)
-                        {
+                        {    
                             Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
-                            ViewData["Message"] = "Role not found";
+                            ViewData["Message"] = "Something went wrong";
                             return View();
                         }
                         

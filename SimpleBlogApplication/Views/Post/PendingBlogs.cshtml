@@ -23,41 +23,45 @@
                 <i class="fa fa-image"></i>
             </div>            
             <p class="text-danger">@ErrorMessage</p>
-            @foreach (Post post in Model.Blogs)
+            @if(Model.Blogs != null)
             {
-                <div class="vtimeline-block">
-                    <span class="vtimeline-date">@post.UploadDateTime.ToString("MMM dd, yyyy")</span><div class="vtimeline-content">
-                        <h3 class="text-info-emphasis">@post.Title</h3>
-                        <ul class="post-meta list-inline">
-                            <li class="list-inline-item">
-                                <i class="fa fa-user-circle-o"></i> <a href="#">
-                                    @{
-                                        var a = $"{post.AppUser?.FirstName ?? ""} {post.AppUser?.LastName ?? ""}";
-                                    }@a
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <i class="fa fa-calendar-o"></i> <a href="#">@post.UploadDateTime.ToString("dd MMM, yyyy h:m")</a>
-                            </li>
-                        </ul>
-                        <p>
-                            @post.Content
-                        </p>
-                        @if (post.Id == (int)postId){
-                            <span class="text-danger">@message</span>
-                        }
-                        
-                        <form asp-action="Approval" method="post">
-                            <input type="hidden" name="id" value="@post.Id" />
-                            <select asp-for="@post.CurrentStatus" asp-items="Html.GetEnumSelectList<Status>()" name="status">
-                            </select>
-                            <button type="submit">Submit</button>
-                        </form>
+                @foreach (Post post in Model.Blogs)
+                {
+                    <div class="vtimeline-block">
+                        <span class="vtimeline-date">@post.UploadDateTime.ToString("MMM dd, yyyy")</span><div class="vtimeline-content">
+                            <h3 class="text-info-emphasis">@post.Title</h3>
+                            <ul class="post-meta list-inline">
+                                <li class="list-inline-item">
+                                    <i class="fa fa-user-circle-o"></i> <a href="#">
+                                        @{
+                                            var a = $"{post.AppUser?.FirstName ?? ""} {post.AppUser?.LastName ?? ""}";
+                                        }@a
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-calendar-o"></i> <a href="#">@post.UploadDateTime.ToString("dd MMM, yyyy h:m")</a>
+                                </li>
+                            </ul>
+                            <p>
+                                @post.Content
+                            </p>
+                            @if (post.Id == (int)postId)
+                            {
+                                <span class="text-danger">@message</span>
+                            }
+
+                            <form asp-action="Approval" method="post">
+                                <input type="hidden" name="id" value="@post.Id" />
+                                <select asp-for="@post.CurrentStatus" asp-items="Html.GetEnumSelectList<Status>()" name="status">
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <hr />
-                <br />
-            }
+                    <hr />
+                    <br />
+                }
+            }           
         </div>
     </div>
 </div>

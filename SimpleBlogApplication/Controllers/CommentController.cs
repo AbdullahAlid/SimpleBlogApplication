@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 using SimpleBlogApplication.BLL.IServices;
 using SimpleBlogApplication.BLL.Services;
@@ -20,13 +21,15 @@ namespace SimpleBlogApplication.Controllers
         private readonly IPostService _postService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public CommentController(ICommentService commentService, IPostService postService, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public CommentController(ICommentService commentService, IPostService postService, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IMemoryCache cache)
         {
             _commentService = commentService;
             _postService = postService;
             _userManager = userManager;
             _context = context;
+            _cache = cache;
         }
 
         [AllowAnonymous]
@@ -67,6 +70,10 @@ namespace SimpleBlogApplication.Controllers
             {
                 long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
                 _commentService.AddComment(userId, post.PostId, post.CommentText);
+                foreach (string key in PostController.cachedKeyNames)
+                {
+                    _cache.Remove(key);
+                }
                 return RedirectToAction(nameof(Create), new { id = post.PostId });
             }
             catch(Exception ex)

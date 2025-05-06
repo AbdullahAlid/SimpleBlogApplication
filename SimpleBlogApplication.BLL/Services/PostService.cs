@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace SimpleBlogApplication.BLL.Services
                 post.UploadDateTime = DateTime.Now;
                 _postRepository.AddBlog(post);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -43,20 +44,20 @@ namespace SimpleBlogApplication.BLL.Services
             {
                 throw;
             }
-            
+
         }
 
-        public Post? GetBlog(long id) 
+        public Post? GetBlog(long id)
         {
             try
             {
                 return _postRepository.GetBlog(id);
             }
-            catch (Exception) 
+            catch (Exception)
             {
                 throw;
             }
-            
+
         }
 
         public void UpdateBlog(long id, Status status, long userId)
@@ -72,25 +73,49 @@ namespace SimpleBlogApplication.BLL.Services
             {
                 throw;
             }
-            
+
         }
 
         public IEnumerable<Post> GetTopFiveBlogs()
         {
             try
             {
-                var posts = _postRepository.GetAllBlog().OrderByDescending(p => (p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count())).Take(5);
+                var posts = _postRepository.GetTopFiveBlogs();
                 return posts;
             }
-            catch (Exception) 
+            catch (Exception)
             {
                 throw;
-            }       
+            }
         }
 
         public void DeleteBlog(Post post)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Post>> GetStatusWisePost(int skipped, int amount, Expression<Func<Post, bool>> filter)
+        {
+            try
+            {
+                return await _postRepository.GetStatusWisePost(skipped, amount, filter);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task<long> GetStatusWisePostCount(Expression<Func<Post, bool>> filter)
+        {
+            try
+            {
+                return await _postRepository.GetStatusWisePostCount(filter);
+            }
+            catch (Exception)
+            {
+                throw;
+
+            }
         }
     }
 }

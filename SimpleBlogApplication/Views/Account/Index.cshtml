@@ -18,23 +18,28 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.User.FirstName</td>
-                <td>@user.User.LastName</td>
-                <td>@user.User.Email</td>
-                <td>@user.Role</td>
-                <td>@user.User.ValidityStatus</td>                
-                <td>
-                    @if(user.User.ValidityStatus == UserValidityStatus.Active){
-                        <a class="btn btn-danger btn-sm" asp-controller="Account" asp-action="Block" asp-route-id="@user.User.Id">Block</a>
-                    }
-                    else{
-                        <a class="btn btn-success btn-sm" asp-controller="Account" asp-action="Unblock" asp-route-id="@user.User.Id">Unblock</a>
-                    }                   
-                </td>
-            </tr>
+        @if(Model != null){
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.User.FirstName</td>
+                    <td>@user.User.LastName</td>
+                    <td>@user.User.Email</td>
+                    <td>@user.Role</td>
+                    <td>@user.User.ValidityStatus</td>
+                    <td>
+                        @if (user.User.ValidityStatus == UserValidityStatus.Active)
+                        {
+                            <a class="btn btn-danger btn-sm" asp-controller="Account" asp-action="Block" asp-route-id="@user.User.Id">Block</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success btn-sm" asp-controller="Account" asp-action="Unblock" asp-route-id="@user.User.Id">Unblock</a>
+                        }
+                    </td>
+                </tr>
+            }
         }
+        
     </tbody>
 </table>

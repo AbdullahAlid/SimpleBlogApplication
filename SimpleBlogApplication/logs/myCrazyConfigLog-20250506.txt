@@ -1,0 +1,309 @@
+2025-05-06 09:02:40.866 +06:00 [INF] Elapsed time 1051 ms when accessing from database
+2025-05-06 09:02:45.488 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:02:45.489 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:02:59.707 +06:00 [INF] Elapsed time 41 ms when accessing from database
+2025-05-06 09:03:03.191 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:03.192 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:03:11.293 +06:00 [INF] Elapsed time 71 ms when accessing from database
+2025-05-06 09:03:14.346 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:14.348 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:03:20.077 +06:00 [INF] Elapsed time 43 ms when accessing from database
+2025-05-06 09:03:22.602 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:22.603 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:03:26.429 +06:00 [INF] Elapsed time 33 ms when accessing from database
+2025-05-06 09:03:41.227 +06:00 [INF] Elapsed time 39 ms when accessing from database
+2025-05-06 09:03:44.352 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:44.353 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:03:46.337 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:46.338 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:03:48.571 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:48.572 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:03:50.196 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:50.196 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:03:52.159 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:52.160 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:03:53.530 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:53.530 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:03:55.529 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:55.529 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:03:57.041 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:03:57.042 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:00.377 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:00.379 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:01.790 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:01.791 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:01.949 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:01.949 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:02.254 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:02.254 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:02.429 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:02.431 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:02.605 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:02.606 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:02.766 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:02.768 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:02.933 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:02.934 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:03.094 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:03.095 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:03.251 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:03.251 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:03.398 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:03.399 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:03.629 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:03.630 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:03.812 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:03.814 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:03.989 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:03.991 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:04:04.141 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:04.142 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:04:04.285 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:04:04.287 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:11:57.588 +06:00 [INF] Elapsed time 948 ms when accessing from database
+2025-05-06 09:13:06.109 +06:00 [INF] Elapsed time 1034 ms when accessing from database
+2025-05-06 09:13:26.918 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:13:26.919 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:16:02.424 +06:00 [INF] Elapsed time 986 ms when accessing from database
+2025-05-06 09:16:35.041 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:16:35.043 +06:00 [INF] Elapsed time 2 ms when accessing from cache
+2025-05-06 09:16:45.623 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:16:45.624 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:17:13.513 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:17:13.514 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:17:41.290 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:17:41.290 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:17:43.067 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:17:43.068 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:30:44.918 +06:00 [INF] Elapsed time 15 ms when accessing from database
+2025-05-06 09:30:58.209 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:30:58.213 +06:00 [INF] Elapsed time 3 ms when accessing from cache
+2025-05-06 09:35:42.076 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:35:42.077 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:37:17.664 +06:00 [INF] Elapsed time 946 ms when accessing from database
+2025-05-06 09:37:33.455 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:37:33.455 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 09:37:42.794 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:37:42.795 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:37:45.210 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:37:45.212 +06:00 [INF] Elapsed time 2 ms when accessing from cache
+2025-05-06 09:38:08.178 +06:00 [INF] Elapsed time 15 ms when accessing from database
+2025-05-06 09:38:16.049 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:38:16.050 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:38:33.584 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:38:33.584 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:38:50.123 +06:00 [INF] Data is accessing from cache
+2025-05-06 09:38:50.124 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 09:59:19.021 +06:00 [INF] Elapsed time 41098 ms when accessing from database
+2025-05-06 09:59:58.343 +06:00 [INF] Data is accessing from cache
+2025-05-06 10:00:10.770 +06:00 [INF] Elapsed time 10082 ms when accessing from cache
+2025-05-06 10:01:18.792 +06:00 [INF] Elapsed time 9284 ms when accessing from database
+2025-05-06 10:01:19.376 +06:00 [INF] Elapsed time 3831 ms when accessing from database
+2025-05-06 10:03:18.903 +06:00 [INF] Elapsed time 18486 ms when accessing from database
+2025-05-06 10:03:21.264 +06:00 [INF] Elapsed time 19488 ms when accessing from database
+2025-05-06 10:15:13.050 +06:00 [INF] Data is accessing from cache
+2025-05-06 10:15:13.050 +06:00 [INF] Elapsed time 4589 ms when accessing from database
+2025-05-06 10:15:13.074 +06:00 [INF] Elapsed time 45 ms when accessing from database
+2025-05-06 10:15:28.771 +06:00 [INF] Data is accessing from cache
+2025-05-06 10:15:28.772 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 10:15:36.823 +06:00 [INF] Data is accessing from cache
+2025-05-06 10:15:36.824 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 10:15:42.027 +06:00 [INF] Data is accessing from cache
+2025-05-06 10:15:42.028 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 10:21:32.470 +06:00 [ERR] test exception
+2025-05-06 10:26:34.523 +06:00 [ERR] test exception
+2025-05-06 10:32:15.131 +06:00 [ERR] test exception
+2025-05-06 10:36:09.333 +06:00 [ERR] test exception
+2025-05-06 11:35:01.545 +06:00 [INF] Elapsed time 962 ms when accessing from database
+2025-05-06 11:35:15.531 +06:00 [INF] Elapsed time 990 ms when accessing from database
+2025-05-06 11:35:53.195 +06:00 [INF] Data is accessing from cache
+2025-05-06 11:35:53.197 +06:00 [INF] Elapsed time 2 ms when accessing from cache
+2025-05-06 11:37:03.695 +06:00 [INF] Elapsed time 985 ms when accessing from database
+2025-05-06 11:47:24.412 +06:00 [INF] Elapsed time 62 ms when accessing from database
+2025-05-06 11:47:33.059 +06:00 [INF] Elapsed time 802 ms when accessing from database
+2025-05-06 11:47:49.447 +06:00 [INF] Elapsed time 800 ms when accessing from database
+2025-05-06 11:48:24.586 +06:00 [INF] Data is accessing from cache
+2025-05-06 11:48:24.588 +06:00 [INF] Elapsed time 2 ms when accessing from cache
+2025-05-06 11:49:00.798 +06:00 [INF] Elapsed time 803 ms when accessing from database
+2025-05-06 11:49:33.237 +06:00 [INF] Elapsed time 1009 ms when accessing from database
+2025-05-06 11:49:39.220 +06:00 [INF] Data is accessing from cache
+2025-05-06 11:49:39.222 +06:00 [INF] Elapsed time 2 ms when accessing from cache
+2025-05-06 11:50:53.445 +06:00 [INF] Elapsed time 1021 ms when accessing from database
+2025-05-06 11:51:21.235 +06:00 [INF] Data is accessing from cache
+2025-05-06 11:51:21.237 +06:00 [INF] Elapsed time 2 ms when accessing from cache
+2025-05-06 12:48:31.402 +06:00 [INF] Elapsed time 1726 ms when accessing from database
+2025-05-06 12:48:54.140 +06:00 [INF] Elapsed time 98 ms when accessing from database
+2025-05-06 12:48:58.824 +06:00 [INF] Data is accessing from cache
+2025-05-06 12:48:58.824 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 15:51:44.649 +06:00 [INF] Elapsed time 1024 ms when accessing from database
+2025-05-06 15:52:14.573 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:52:14.574 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 15:53:20.470 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:53:20.471 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 15:53:33.366 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:53:33.366 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:19.814 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:19.815 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 15:57:23.158 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:23.158 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:24.479 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:24.484 +06:00 [INF] Elapsed time 4 ms when accessing from cache
+2025-05-06 15:57:25.566 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:25.566 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:26.634 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:26.634 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:27.329 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:27.330 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:27.603 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:27.603 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:27.967 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:27.967 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:28.232 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:28.232 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:29.022 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:29.024 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 15:57:46.208 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:46.209 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:47.906 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:57:47.907 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:57:58.964 +06:00 [INF] Elapsed time 122 ms when accessing from database
+2025-05-06 15:58:00.677 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:58:00.677 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:58:09.460 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:58:09.460 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:58:11.536 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:58:11.536 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:58:18.070 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:58:18.071 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 15:58:26.122 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:58:26.127 +06:00 [INF] Elapsed time 5 ms when accessing from cache
+2025-05-06 15:58:26.147 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:58:26.147 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:58:30.282 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:58:30.282 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 15:59:00.116 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:59:00.118 +06:00 [INF] Elapsed time 2 ms when accessing from cache
+2025-05-06 15:59:53.227 +06:00 [INF] Data is accessing from cache
+2025-05-06 15:59:53.228 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:24:52.918 +06:00 [INF] Elapsed time 1080 ms when accessing from database
+2025-05-06 16:25:17.680 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:25:17.681 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:25:25.044 +06:00 [INF] Elapsed time 61 ms when accessing from database
+2025-05-06 16:25:26.623 +06:00 [INF] Elapsed time 20 ms when accessing from database
+2025-05-06 16:25:43.338 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:25:43.338 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:26:01.623 +06:00 [INF] Elapsed time 49 ms when accessing from database
+2025-05-06 16:26:08.757 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:26:08.758 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:26:44.312 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:26:44.313 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:26:50.921 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:26:50.922 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:27:00.027 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:27:00.027 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:27:00.027 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:27:00.028 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:27:19.462 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:27:19.463 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:27:27.448 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:27:27.449 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:28:16.544 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:28:16.545 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:29:17.572 +06:00 [INF] Elapsed time 18 ms when accessing from database
+2025-05-06 16:29:54.173 +06:00 [INF] Elapsed time 77 ms when accessing from database
+2025-05-06 16:30:08.508 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:30:08.509 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:31:14.779 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:31:14.780 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:31:28.474 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:31:28.475 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:31:34.771 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:31:34.771 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:31:58.246 +06:00 [INF] Elapsed time 1083 ms when accessing from database
+2025-05-06 16:32:01.822 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:32:01.823 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:32:10.448 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:32:10.448 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:32:54.504 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:32:54.505 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:33:31.532 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:33:31.533 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:33:50.979 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:33:50.979 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:34:58.456 +06:00 [INF] Elapsed time 64 ms when accessing from database
+2025-05-06 16:35:10.679 +06:00 [INF] Elapsed time 42 ms when accessing from database
+2025-05-06 16:35:12.664 +06:00 [INF] Elapsed time 89 ms when accessing from database
+2025-05-06 16:35:14.977 +06:00 [INF] Elapsed time 70 ms when accessing from database
+2025-05-06 16:35:17.090 +06:00 [INF] Elapsed time 41 ms when accessing from database
+2025-05-06 16:35:18.609 +06:00 [INF] Elapsed time 100 ms when accessing from database
+2025-05-06 16:35:40.113 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:35:40.113 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:35:42.020 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:35:42.020 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 16:35:47.718 +06:00 [INF] Elapsed time 18 ms when accessing from database
+2025-05-06 16:35:49.529 +06:00 [INF] Elapsed time 46 ms when accessing from database
+2025-05-06 16:35:51.629 +06:00 [INF] Elapsed time 87 ms when accessing from database
+2025-05-06 16:35:53.789 +06:00 [INF] Elapsed time 20 ms when accessing from database
+2025-05-06 16:35:57.490 +06:00 [INF] Elapsed time 20 ms when accessing from database
+2025-05-06 16:36:00.366 +06:00 [INF] Elapsed time 48 ms when accessing from database
+2025-05-06 16:48:09.027 +06:00 [INF] Elapsed time 75 ms when accessing from database
+2025-05-06 16:48:58.639 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:48:58.641 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:55:03.978 +06:00 [INF] Elapsed time 1046 ms when accessing from database
+2025-05-06 16:55:20.964 +06:00 [INF] Data is accessing from cache
+2025-05-06 16:55:20.965 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 16:55:34.307 +06:00 [INF] Elapsed time 134 ms when accessing from database
+2025-05-06 16:55:40.057 +06:00 [INF] Elapsed time 102 ms when accessing from database
+2025-05-06 16:56:27.849 +06:00 [INF] Elapsed time 44 ms when accessing from database
+2025-05-06 17:12:45.958 +06:00 [INF] Elapsed time 47 ms when accessing from database
+2025-05-06 17:13:01.887 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:13:01.888 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 17:29:29.265 +06:00 [INF] Source: Post/Create Message: Exception occurs
+2025-05-06 17:32:41.768 +06:00 [INF] Elapsed time 1030 ms when accessing from database
+2025-05-06 17:32:45.493 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:32:45.495 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 17:32:53.125 +06:00 [INF] Source: Post/ReactionHandler Message: Exception occur
+2025-05-06 17:32:53.173 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:32:53.177 +06:00 [INF] Elapsed time 4 ms when accessing from cache
+2025-05-06 17:33:08.609 +06:00 [INF] Source: Post/ReactionHandler Message: Exception occur
+2025-05-06 17:33:08.620 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:33:08.621 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 17:35:18.506 +06:00 [INF] Elapsed time 1066 ms when accessing from database
+2025-05-06 17:35:20.049 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:35:20.050 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 17:35:26.370 +06:00 [ERR] Exception occurs
+2025-05-06 17:36:28.520 +06:00 [INF] Elapsed time 1036 ms when accessing from database
+2025-05-06 17:37:39.628 +06:00 [ERR] Exception occurs
+2025-05-06 17:38:53.702 +06:00 [INF] Elapsed time 1081 ms when accessing from database
+2025-05-06 17:39:00.816 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:39:00.817 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 17:39:03.986 +06:00 [ERR] Exception occurs
+2025-05-06 17:41:38.391 +06:00 [ERR] Exception occured
+2025-05-06 17:44:50.909 +06:00 [ERR] Error occurs
+2025-05-06 17:46:06.959 +06:00 [INF] Elapsed time 1413 ms when accessing from database
+2025-05-06 17:46:09.566 +06:00 [ERR] Error occurs
+2025-05-06 17:46:15.716 +06:00 [ERR] Error occurs
+2025-05-06 17:46:16.376 +06:00 [ERR] Error occurs
+2025-05-06 17:48:32.136 +06:00 [INF] Source: Account/Index Message: Error occurs
+2025-05-06 17:49:36.596 +06:00 [INF] Source: Account/Index Message: Error occurs
+2025-05-06 17:49:36.661 +06:00 [INF] Elapsed time 1064 ms when accessing from database
+2025-05-06 17:50:07.771 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:50:07.773 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 17:57:07.424 +06:00 [INF] Elapsed time 31 ms when accessing from database
+2025-05-06 17:57:50.710 +06:00 [INF] Elapsed time 1067 ms when accessing from database
+2025-05-06 17:58:19.166 +06:00 [INF] Elapsed time 999 ms when accessing from database
+2025-05-06 17:58:55.154 +06:00 [INF] Data is accessing from cache
+2025-05-06 17:58:55.155 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 18:03:40.222 +06:00 [INF] Elapsed time 2290 ms when accessing from database
+2025-05-06 18:04:20.281 +06:00 [INF] Source: Account/Register Message: Exception occured
+2025-05-06 18:07:13.903 +06:00 [INF] Source: Comment/Create Message: Exception occurs
+2025-05-06 18:07:13.920 +06:00 [INF] Data is accessing from cache
+2025-05-06 18:07:13.921 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 18:08:21.820 +06:00 [INF] Data is accessing from cache
+2025-05-06 18:08:21.821 +06:00 [INF] Elapsed time 0 ms when accessing from cache
+2025-05-06 18:09:32.788 +06:00 [INF] Data is accessing from cache
+2025-05-06 18:09:32.789 +06:00 [INF] Elapsed time 1 ms when accessing from cache
+2025-05-06 18:11:09.966 +06:00 [INF] Source: Comment/Create Message: Exception occured
+2025-05-06 18:11:37.431 +06:00 [INF] Source: Comment/Create Message: Exception occured
+2025-05-06 18:13:17.841 +06:00 [INF] Source: Comment/Create Message: Exception occured
+2025-05-06 18:19:19.976 +06:00 [INF] Source: Comment/Create Message: Exception occured

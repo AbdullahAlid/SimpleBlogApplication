@@ -21,7 +21,7 @@ namespace SimpleBlogApplication.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMemoryCache _cache;
         private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
-        private static List<string> cachedKeyNames = new List<string>();
+        public static List<string> cachedKeyNames = new List<string>();
 
         public PostController(IPostService postService, IReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMemoryCache cache)
         {
@@ -62,9 +62,10 @@ namespace SimpleBlogApplication.Controllers
             var cacheKey = $"Posts: {skip}";
             ViewData["userId"] = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             string msg = "";
+            var blogList = new BlogList();
             try
             {                
-                if (_cache.TryGetValue(cacheKey, out BlogList? blogList))
+                if (_cache.TryGetValue(cacheKey, out blogList))
                 {
                     msg = "from cache";
                     Log.Information($"Data is accessing from cache");
@@ -73,24 +74,25 @@ namespace SimpleBlogApplication.Controllers
                 {
                     try
                     {
-                        await semaphore.WaitAsync();
+                        await semaphore.WaitAsync();                        
                         if (_cache.TryGetValue(cacheKey, out blogList))
                         {
                             msg = "from cache";
                             Log.Information($"Data is accessing from cache");
                         }
+
                         else
                         {
 
-                            var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Skip(skip).Take(step).ToList();
+                            var posts = await _postService.GetStatusWisePost(skip, step, p => p.CurrentStatus == Status.Approved);
 
                             blogList = new BlogList()
                             {
                                 Blogs = posts,
                                 StartFrom = skip,
-                                TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Approved).Count()
+                                TotalBlogs = await _postService.GetStatusWisePostCount(p => p.CurrentStatus == Status.Approved)
                             };
-                            var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(300)).SetAbsoluteExpiration(TimeSpan.FromSeconds(3600)).SetPriority(CacheItemPriority.Normal).SetSize(1);
+                            var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(300)).SetAbsoluteExpiration(TimeSpan.FromSeconds(3600)).SetPriority(CacheItemPriority.Normal).SetSize(2);
                             _cache.Set(cacheKey, blogList, cacheOptions);
                             cachedKeyNames.Add(cacheKey);
                         }
@@ -109,9 +111,9 @@ namespace SimpleBlogApplication.Controllers
             catch(Exception ex)
             {
                 
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                Log.Error(ex.Message,ex);
                 TempData["Message"] = "Something went wrong!";
-                return View();
+                return View(new BlogList());
             }
 
         }
@@ -128,7 +130,7 @@ namespace SimpleBlogApplication.Controllers
             {
                 post.AppUserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
                 try
-                {
+                {                   
                     _postService.AddBlog(post);
                 }
                 catch(Exception ex)
@@ -147,12 +149,13 @@ namespace SimpleBlogApplication.Controllers
             
         }
 
-        public IActionResult ReactionHandler(int id, Reaction type, string page = "")
+        public IActionResult ReactionHandler(int id, Reaction type, string page = "", int skip = 0)
         {
             int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             try
             {
                 _reactionService.HandleReaction(userId, id, type);
+                RemoveCache();
 
                 if (page == "TopFive")
                 {
@@ -161,7 +164,7 @@ namespace SimpleBlogApplication.Controllers
 
                 if (page == "own")
                 {
-                    return RedirectToAction(nameof(OwnBlogs));
+                    return RedirectToAction(nameof(OwnBlogs), new { skip = skip });
                 }
 
                 if (page == "create")
@@ -169,7 +172,9 @@ namespace SimpleBlogApplication.Controllers
                     return RedirectToAction(nameof(Create), nameof(Comment), new { id = id });
                 }
 
-                return RedirectToAction(nameof(Index));
+
+
+                return RedirectToAction(nameof(Index), new {skip = skip});
             }
             catch (Exception ex)
             {
@@ -180,25 +185,26 @@ namespace SimpleBlogApplication.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult PendingBlogs(int skip = 0, int step = 5)
+        public async Task<IActionResult> PendingBlogs(int skip = 0, int step = 5)
         {
             try
             {
-                var posts = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Skip(skip).Take(step);
+                var posts = await _postService.GetStatusWisePost(skip, step, p => p.CurrentStatus == Status.Pending);
                 ViewData["Id"] = 0;
                 var blogList = new BlogList()
                 {
                     Blogs = posts,
                     StartFrom = skip,
-                    TotalBlogs = _postService.GetAllBlog().Where(p => p.CurrentStatus == Status.Pending).Count()
+                    TotalBlogs = await _postService.GetStatusWisePostCount(p => p.CurrentStatus == Status.Pending),
                 };
                 return View(blogList);
             }
             catch(Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                Log.Error(ex.Message, ex);
                 TempData["Message"] = "Something went worng";
-                return View();
+                return View(new BlogList());
             }
         }
 
@@ -217,17 +223,15 @@ namespace SimpleBlogApplication.Controllers
             {
                 if (status == Status.Approved)
                 {
-                    foreach(string key in cachedKeyNames)
-                    {
-                        _cache.Remove(key);
-                    }
+                    RemoveCache();
                 }
                 _postService.UpdateBlog(id, status, userId);
                 return RedirectToAction(nameof(PendingBlogs));
             }
             catch(Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                Log.Error(ex.Message, ex);
                 TempData["Message"] = "Something went wrong!";
                 return RedirectToAction(nameof(PendingBlogs));
             }
@@ -244,7 +248,7 @@ namespace SimpleBlogApplication.Controllers
             return RedirectToAction(nameof(PendingBlogs), new { skip = startfrom - 5 });
         }
 
-        public IActionResult OwnBlogs(int skip = 0, int step = 5)
+        public async Task<IActionResult> OwnBlogs(int skip = 0, int step = 5)
         {
             var role = HttpContext.User.IsInRole("BlockedUser");
             long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
@@ -252,18 +256,19 @@ namespace SimpleBlogApplication.Controllers
             ViewData["isFilterable"] = true;
             try
             {
-                var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Skip(skip).Take(step);
+                var posts = await _postService.GetStatusWisePost(skip, step, p => p.AppUserId == userId);
                 var blogList = new BlogList()
                 {
                     Blogs = posts,
                     StartFrom = skip,
-                    TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId).Count()
+                    TotalBlogs = await _postService.GetStatusWisePostCount(p => p.AppUserId == userId)
                 };
                 return View(nameof(Index), blogList);
             }
             catch(Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                Log.Error(ex.Message, ex);
                 TempData["Message"] = "Something went wrong!";
                 return View(nameof(Index));
             }
@@ -276,7 +281,7 @@ namespace SimpleBlogApplication.Controllers
             return RedirectToAction(nameof(FilteredBlogs), new { filteredValue = filteredValue });
         }
 
-        public IActionResult FilteredBlogs(Status filteredValue, int skip = 0, int step = 5)
+        public async Task<IActionResult> FilteredBlogs(Status filteredValue, int skip = 0, int step = 5)
         {
             if(filteredValue != Status.Pending && filteredValue != Status.Approved && filteredValue != Status.Rejected)
             {
@@ -290,18 +295,19 @@ namespace SimpleBlogApplication.Controllers
             ViewData["filteredValue"] = filteredValue;
             try
             {
-                var posts = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Skip(skip).Take(step);
+                var posts = await _postService.GetStatusWisePost(skip, step, p => p.AppUserId == userId && p.CurrentStatus == filteredValue);
                 var blogList = new BlogList()
                 {
                     Blogs = posts,
                     StartFrom = skip,
-                    TotalBlogs = _postService.GetAllBlog().Where(p => p.AppUserId == userId && p.CurrentStatus == filteredValue).Count()
+                    TotalBlogs = await _postService.GetStatusWisePostCount(p => p.AppUserId == userId && p.CurrentStatus == filteredValue)
                 };
                 return View(nameof(Index), blogList);
             }
             catch(Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                Log.Error(ex.Message, ex);
                 TempData["Message"] = "Something went wrong";
                 return View(nameof(Index));
             }
@@ -333,11 +339,20 @@ namespace SimpleBlogApplication.Controllers
             }
             catch (Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                Log.Error(ex.Message, ex);
                 TempData["Message"] = "Something went wrong";
-                return View(nameof(Index));
+                return View(nameof(Index), new BlogList());
             }
 
+        }
+
+        private void RemoveCache()
+        {
+            foreach (string key in cachedKeyNames)
+            {
+                _cache.Remove(key);
+            }
         }
     }
 }

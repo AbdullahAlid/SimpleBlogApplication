@@ -34,7 +34,6 @@ namespace SimpleBlogApplication
 
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration)/*MinimumLevel.Information().WriteTo.Console().WriteTo.File("logs/myLog-.txt",rollingInterval; RollingInterval.Day)*/.CreateLogger();
 
-            builder.Host.UseSerilog();
 
 
             var app = builder.Build();
@@ -47,7 +46,6 @@ namespace SimpleBlogApplication
                 app.UseHsts();
             }
 
-            app.UseSerilogRequestLogging();
             app.UseHttpsRedirection();
             app.UseRouting();
 
