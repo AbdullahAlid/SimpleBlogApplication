@@ -15,38 +15,40 @@ namespace SimpleBlogApplication.Controllers
     [Authorize]
     public class PostController : Controller
     {
+        private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+        public static List<string> cachedKeyNames = new List<string>();
         private readonly IPostService _postService;
         private readonly IReactionService _reactionService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IMemoryCache _cache;
-        private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
-        public static List<string> cachedKeyNames = new List<string>();
+        private readonly IMemoryCache _cache;       
+        private readonly ILogger<PostController> _logger;
 
-        public PostController(IPostService postService, IReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMemoryCache cache)
+        public PostController(IPostService postService, IReactionService reactionService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMemoryCache cache, ILogger<PostController> logger)
         {
             _postService = postService;
             _reactionService = reactionService;
             _userManager = userManager;
             _signInManager = signInManager;
             _cache = cache;
+            _logger = logger;
         }
 
         [AllowAnonymous]
         public IActionResult LoadPrev(int startfrom, bool loadPrevPage)
         {
-            if (loadPrevPage)
+            if (loadPrevPage == true)
             {   
                 return RedirectToAction(nameof(OwnBlogs), new { skip = startfrom - 5 });
             }
-            return RedirectToAction("Index", new { skip = startfrom - 5 });
+            return RedirectToAction(nameof(Index), new { skip = startfrom - 5 });
         }
 
         [AllowAnonymous]
         public IActionResult LoadNext(int startfrom, bool loadNextPage)
         {
 
-            if (loadNextPage)
+            if (loadNextPage == true)
             {               
                 return RedirectToAction(nameof(OwnBlogs), new { skip = startfrom });
             }
@@ -60,15 +62,15 @@ namespace SimpleBlogApplication.Controllers
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var cacheKey = $"Posts: {skip}";
-            ViewData["userId"] = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            ViewData["userId"] = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
             string msg = "";
             var blogList = new BlogList();
             try
-            {                
+            {    
                 if (_cache.TryGetValue(cacheKey, out blogList))
                 {
                     msg = "from cache";
-                    Log.Information($"Data is accessing from cache");
+                    _logger.LogInformation($"Data is accessing from cache");
                 }
                 else
                 {
@@ -78,7 +80,7 @@ namespace SimpleBlogApplication.Controllers
                         if (_cache.TryGetValue(cacheKey, out blogList))
                         {
                             msg = "from cache";
-                            Log.Information($"Data is accessing from cache");
+                            _logger.LogInformation($"Data is accessing from cache");
                         }
 
                         else
@@ -92,7 +94,7 @@ namespace SimpleBlogApplication.Controllers
                                 StartFrom = skip,
                                 TotalBlogs = await _postService.GetStatusWisePostCount(p => p.CurrentStatus == Status.Approved)
                             };
-                            var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(300)).SetAbsoluteExpiration(TimeSpan.FromSeconds(3600)).SetPriority(CacheItemPriority.Normal).SetSize(2);
+                            var cacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(300)).SetAbsoluteExpiration(TimeSpan.FromSeconds(3600)).SetPriority(CacheItemPriority.Normal);
                             _cache.Set(cacheKey, blogList, cacheOptions);
                             cachedKeyNames.Add(cacheKey);
                         }
@@ -105,13 +107,12 @@ namespace SimpleBlogApplication.Controllers
                 }
                 stopwatch.Stop();
                 var time = stopwatch.ElapsedMilliseconds;
-                Log.Information("Elapsed time {Time} ms when accessing {Msg}", time, msg);
+                _logger.LogInformation("Elapsed time {Time} ms when accessing {Msg}", time, msg);
                 return View(blogList);
             }
             catch(Exception ex)
             {
-                
-                Log.Error(ex.Message,ex);
+                _logger.LogError(ex.Message,ex);
                 TempData["Message"] = "Something went wrong!";
                 return View(new BlogList());
             }
@@ -128,14 +129,14 @@ namespace SimpleBlogApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                post.AppUserId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+                post.AppUserId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
                 try
                 {                   
                     _postService.AddBlog(post);
                 }
                 catch(Exception ex)
                 {
-                    Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                    _logger.LogError($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                     TempData["Message"] = "Something went worng";
                     return View();
                 }
@@ -151,7 +152,7 @@ namespace SimpleBlogApplication.Controllers
 
         public IActionResult ReactionHandler(int id, Reaction type, string page = "", int skip = 0)
         {
-            int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
             try
             {
                 var post = _postService.GetBlog(id);
@@ -166,21 +167,23 @@ namespace SimpleBlogApplication.Controllers
                 {
                     return RedirectToAction(nameof(TopBlogs));
                 }
-
-                if (page == "own")
+                else if (page == "own")
                 {
                     return RedirectToAction(nameof(OwnBlogs), new { skip = skip });
                 }
-
-                if (page == "create")
+                else if (page == "create")
                 {
                     return RedirectToAction(nameof(Create), nameof(Comment), new { id = id });
                 }
-                return RedirectToAction(nameof(Index), new {skip = skip});
+                else
+                {
+                    return RedirectToAction(nameof(Index), new { skip = skip });
+                }
+                
             }
             catch (Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                _logger.LogError($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = ex.Message;
                 return RedirectToAction(nameof(Index));
             }
@@ -204,7 +207,7 @@ namespace SimpleBlogApplication.Controllers
             catch(Exception ex)
             {
                 //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
-                Log.Error(ex.Message, ex);
+                _logger.LogError(ex.Message, ex);
                 TempData["Message"] = "Something went worng";
                 return View(new BlogList());
             }
@@ -233,7 +236,7 @@ namespace SimpleBlogApplication.Controllers
             catch(Exception ex)
             {
                 //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
-                Log.Error(ex.Message, ex);
+                _logger.LogError(ex.Message, ex);
                 TempData["Message"] = "Something went wrong!";
                 return RedirectToAction(nameof(PendingBlogs));
             }
@@ -253,7 +256,7 @@ namespace SimpleBlogApplication.Controllers
         public async Task<IActionResult> OwnBlogs(int skip = 0, int step = 5)
         {
             var role = HttpContext.User.IsInRole("BlockedUser");
-            long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
             ViewData["userId"] = userId;
             ViewData["isFilterable"] = true;
             try
@@ -270,7 +273,7 @@ namespace SimpleBlogApplication.Controllers
             catch(Exception ex)
             {
                 //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
-                Log.Error(ex.Message, ex);
+                _logger.LogError(ex.Message, ex);
                 TempData["Message"] = "Something went wrong!";
                 return View(nameof(Index));
             }
@@ -291,7 +294,7 @@ namespace SimpleBlogApplication.Controllers
                 TempData["Message"] = "Please Select a Status to Filter";
                 return RedirectToAction(nameof(OwnBlogs));
             }
-            long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
             ViewData["userId"] = userId;
             ViewData["isFilterable"] = true;
             ViewData["specificFilter"] = true;
@@ -310,7 +313,7 @@ namespace SimpleBlogApplication.Controllers
             catch(Exception ex)
             {
                 //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
-                Log.Error(ex.Message, ex);
+                _logger.LogError(ex.Message, ex);
                 TempData["Message"] = "Something went wrong";
                 return View(nameof(Index));
             }
@@ -328,7 +331,7 @@ namespace SimpleBlogApplication.Controllers
 
         public IActionResult TopBlogs()
         {
-            long userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
+            long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
             ViewData["userId"] = userId;
             ViewData["pageType"] = "TopFive";
             try
@@ -343,7 +346,7 @@ namespace SimpleBlogApplication.Controllers
             catch (Exception ex)
             {
                 //Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
-                Log.Error(ex.Message, ex);
+                _logger.LogError(ex.Message, ex);
                 TempData["Message"] = "Something went wrong";
                 return View(nameof(Index), new BlogList());
             }

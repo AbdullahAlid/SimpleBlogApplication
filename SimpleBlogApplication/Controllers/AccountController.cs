@@ -150,7 +150,7 @@ namespace SimpleBlogApplication.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("index", "Post");
+            return RedirectToAction(nameof(Index), nameof(Post));
         }
 
         [Authorize]
@@ -168,7 +168,7 @@ namespace SimpleBlogApplication.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction(nameof(Login));
                 }
 
                 var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
@@ -176,7 +176,7 @@ namespace SimpleBlogApplication.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.RefreshSignInAsync(user);
-                    return RedirectToAction("ChangePasswordConfirmation", "Account");
+                    return RedirectToAction(nameof(ChangePasswordConfirmation));
                 }
                 else
                 {

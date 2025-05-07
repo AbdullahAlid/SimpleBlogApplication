@@ -14,6 +14,6 @@ namespace SimpleBlogApplication.BLL.IServices
         public void AddReaction(SubmittedReaction reaction);
         public void UpdateReaction(SubmittedReaction reaction);
         public void RemoveReaction(SubmittedReaction reaction);
-        public void HandleReaction(int userId, int postId, Reaction type);
+        public void HandleReaction(long userId, int postId, Reaction type);
     }
 }

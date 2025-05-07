@@ -21,13 +21,15 @@ namespace SimpleBlogApplication.Controllers
         private readonly IPostService _postService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMemoryCache _cache;
+        ILogger<CommentController> _logger;
 
-        public CommentController(ICommentService commentService, IPostService postService, UserManager<ApplicationUser> userManager, IMemoryCache cache)
+        public CommentController(ICommentService commentService, IPostService postService, UserManager<ApplicationUser> userManager, IMemoryCache cache, ILogger<CommentController> logger)
         {
             _commentService = commentService;
             _postService = postService;
             _userManager = userManager;
             _cache = cache;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -59,7 +61,7 @@ namespace SimpleBlogApplication.Controllers
             }
             catch (Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                _logger.LogError($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "The post you requested wasn't found!";
                 return RedirectToAction(nameof(Index), nameof(Post));
             }
@@ -80,7 +82,7 @@ namespace SimpleBlogApplication.Controllers
             }
             catch(Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                _logger.LogError($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 TempData["Message"] = "Something went wrong";
                 return RedirectToAction(nameof(Create), new { id = post.PostId });
             }

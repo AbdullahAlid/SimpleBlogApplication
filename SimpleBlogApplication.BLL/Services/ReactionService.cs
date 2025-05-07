@@ -43,7 +43,7 @@ namespace SimpleBlogApplication.BLL.Services
             throw new NotImplementedException();
         }
 
-        public void HandleReaction(int userId, int postId, Reaction type)
+        public void HandleReaction(long userId, int postId, Reaction type)
         {
             try
             {
