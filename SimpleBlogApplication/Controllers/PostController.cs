@@ -154,6 +154,11 @@ namespace SimpleBlogApplication.Controllers
             int userId = Convert.ToInt32(_userManager.GetUserId(HttpContext.User));
             try
             {
+                var post = _postService.GetBlog(id);
+                if(post.CurrentStatus != Status.Approved)
+                {
+                    throw new Exception("Trying to react on an unauthorized post");
+                }
                 _reactionService.HandleReaction(userId, id, type);
                 RemoveCache();
 
@@ -171,15 +176,12 @@ namespace SimpleBlogApplication.Controllers
                 {
                     return RedirectToAction(nameof(Create), nameof(Comment), new { id = id });
                 }
-
-
-
                 return RedirectToAction(nameof(Index), new {skip = skip});
             }
             catch (Exception ex)
             {
                 Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
-                TempData["Message"] = "Something went wrong";
+                TempData["Message"] = ex.Message;
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -283,7 +285,8 @@ namespace SimpleBlogApplication.Controllers
 
         public async Task<IActionResult> FilteredBlogs(Status filteredValue, int skip = 0, int step = 5)
         {
-            if(filteredValue != Status.Pending && filteredValue != Status.Approved && filteredValue != Status.Rejected)
+            /*filteredValue != Status.Pending && filteredValue != Status.Approved && filteredValue != Status.Rejected*/
+            if ((int)filteredValue == 0)
             {
                 TempData["Message"] = "Please Select a Status to Filter";
                 return RedirectToAction(nameof(OwnBlogs));

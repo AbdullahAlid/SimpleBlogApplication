@@ -47,7 +47,7 @@ namespace SimpleBlogApplication.BLL.Services
         {
             try
             {
-                var checkAvailablity = _repository.GetAllReaction().FirstOrDefault(x => x.AppUserId == userId && x.PostId == postId && x.CommentId == null);
+                var checkAvailablity = _repository.GetReaction(x => x.AppUserId == userId && x.PostId == postId && x.CommentId == null);
                 SubmittedReaction reaction;
 
                 if (checkAvailablity == null)

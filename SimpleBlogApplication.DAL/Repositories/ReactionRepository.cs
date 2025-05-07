@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlogApplication.DAL.Data;
 using SimpleBlogApplication.DAL.IRepositories;
 using SimpleBlogApplication.DAL.Models;
+
 
 namespace SimpleBlogApplication.DAL.Repositories
 {
@@ -70,9 +72,16 @@ namespace SimpleBlogApplication.DAL.Repositories
             }
         }
 
-        public SubmittedReaction GetReaction(long id)
+        public SubmittedReaction? GetReaction(Expression<Func<SubmittedReaction, bool>> filter)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _context.SubmittedReactions.FirstOrDefault(filter);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

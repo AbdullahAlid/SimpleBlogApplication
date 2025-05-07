@@ -20,15 +20,13 @@ namespace SimpleBlogApplication.Controllers
         private readonly ICommentService _commentService;
         private readonly IPostService _postService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
 
-        public CommentController(ICommentService commentService, IPostService postService, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IMemoryCache cache)
+        public CommentController(ICommentService commentService, IPostService postService, UserManager<ApplicationUser> userManager, IMemoryCache cache)
         {
             _commentService = commentService;
             _postService = postService;
             _userManager = userManager;
-            _context = context;
             _cache = cache;
         }
 
@@ -39,8 +37,12 @@ namespace SimpleBlogApplication.Controllers
 
             try
             {
-                if(post != null)
+                if(post != null )
                 {
+                    if (post.CurrentStatus != Status.Approved)
+                    {
+                        throw new Exception("Tried to comment in unapproved data");
+                    }
                     var postComment = new PostComment()
                     {
                         PostTitle = post.Title,

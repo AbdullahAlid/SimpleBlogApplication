@@ -8,7 +8,7 @@ namespace SimpleBlogApplication.DAL.Models
 {
     public enum Reaction
     {
-        Like,
+        Like = 1,
         Dislike
     }
 }
