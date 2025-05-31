@@ -47,11 +47,10 @@ namespace SimpleBlogApplication.Controllers
         [AllowAnonymous]
         public IActionResult LoadNext(int startfrom, bool loadNextPage)
         {
-
             if (loadNextPage == true)
             {               
                 return RedirectToAction(nameof(OwnBlogs), new { skip = startfrom });
-            }
+            } 
 
             return RedirectToAction(nameof(Index), new {skip = startfrom });
         }
@@ -255,7 +254,6 @@ namespace SimpleBlogApplication.Controllers
 
         public async Task<IActionResult> OwnBlogs(int skip = 0, int step = 5)
         {
-            var role = HttpContext.User.IsInRole("BlockedUser");
             long userId = Convert.ToInt64(_userManager.GetUserId(HttpContext.User));
             ViewData["userId"] = userId;
             ViewData["isFilterable"] = true;
