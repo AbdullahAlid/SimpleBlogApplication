@@ -21,12 +21,12 @@ namespace SimpleBlogApplication.BLL.Services
             _postRepository = postRepository;
         }
 
-        public void AddBlog(Post post)
+        public bool AddBlog(Post post)
         {
             try
             {
                 post.UploadDateTime = DateTime.Now;
-                _postRepository.AddBlog(post);
+                return _postRepository.AddBlog(post);
             }
             catch (Exception)
             {
@@ -57,17 +57,17 @@ namespace SimpleBlogApplication.BLL.Services
             {
                 throw;
             }
-
         }
 
-        public void UpdateBlog(long id, Status status, long userId)
+        public bool UpdateBlog(long id, Status status, long userId)
         {
             try
             {
-                var post = GetBlog(id);
+                 var post = _postRepository.GetBlog(id);
                 post.CurrentStatus = status;
                 post.ApproverId = userId;
-                _postRepository.UpdateBlog(post);
+                return _postRepository.UpdateBlog(post);
+
             }
             catch (Exception)
             {
@@ -89,9 +89,16 @@ namespace SimpleBlogApplication.BLL.Services
             }
         }
 
-        public void DeleteBlog(Post post)
+        public bool DeleteBlog(Post post)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _postRepository.DeleteBlog(post);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Post>> GetStatusWisePost(int skipped, int amount, Expression<Func<Post, bool>> filter)
@@ -105,6 +112,7 @@ namespace SimpleBlogApplication.BLL.Services
                 throw;
             }
         }
+
         public async Task<long> GetStatusWisePostCount(Expression<Func<Post, bool>> filter)
         {
             try
@@ -114,7 +122,6 @@ namespace SimpleBlogApplication.BLL.Services
             catch (Exception)
             {
                 throw;
-
             }
         }
     }

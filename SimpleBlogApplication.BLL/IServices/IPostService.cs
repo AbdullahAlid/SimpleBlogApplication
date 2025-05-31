@@ -13,9 +13,9 @@ namespace SimpleBlogApplication.BLL.IServices
         public IEnumerable<Post> GetAllBlog();
         public IEnumerable<Post> GetTopFiveBlogs();
         public Post GetBlog(long id);
-        public void AddBlog(Post post);
-        public void UpdateBlog(long id, Status status, long userId);
-        public void DeleteBlog(Post post);
+        public bool AddBlog(Post post);
+        public bool UpdateBlog(long id, Status status, long userId);
+        public bool DeleteBlog(Post post);
         public Task<IEnumerable<Post>> GetStatusWisePost(int skipped, int amount, Expression<Func<Post, bool>> filter);
         public Task<long> GetStatusWisePostCount(Expression<Func<Post, bool>> filter);
     }

@@ -50,12 +50,13 @@ namespace SimpleBlogApplication.DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public void AddBlog(Post post)
+        public bool AddBlog(Post post)
         {
             try
             {
                 _context.Posts.Add(post);
                 _context.SaveChanges();
+                return true;
             }
             catch (Exception)
             {
@@ -64,12 +65,13 @@ namespace SimpleBlogApplication.DAL.Repositories
            
         }  
         
-        public void UpdateBlog(Post post)
+        public bool UpdateBlog(Post post)
         {
             try
             {
                 _context.Posts.Update(post);
                 _context.SaveChanges();
+                return true;
             }
             catch (Exception)
             {
@@ -78,7 +80,7 @@ namespace SimpleBlogApplication.DAL.Repositories
             
         }
 
-        public void DeleteBlog(Post post)
+        public bool DeleteBlog(Post post)
         {
             throw new NotImplementedException();
         }
@@ -111,14 +113,13 @@ namespace SimpleBlogApplication.DAL.Repositories
         {
             try
             {
-                var posts = GetAllBlog().OrderByDescending(p => (p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count())).Take(5);
+                var posts = GetAllBlog().OrderByDescending(p => p.SubmittedReactions.Where(l => l.Reaction == Reaction.Like).Count() + p.UploadedComments.Count()).Take(5);
                 return posts;
             }
             catch (Exception)
             {
                 throw;
             }
-
         }
     }
 }

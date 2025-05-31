@@ -42,7 +42,7 @@ namespace SimpleBlogApplication.Controllers
             }
             catch(Exception ex)
             {
-                Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                Log.Error($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                 ViewData["Message"] = "Something went wrong";
                 return View();
             }
@@ -79,7 +79,7 @@ namespace SimpleBlogApplication.Controllers
                         catch (Exception ex)
                         {
                             
-                            Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                            Log.Error($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                             ViewData["Message"] = "Role not found";
                             return View();
                         }
@@ -93,7 +93,7 @@ namespace SimpleBlogApplication.Controllers
                         }
                         catch(Exception ex)
                         {    
-                            Log.Information($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
+                            Log.Error($"Source: {RouteData.Values["controller"]}/{RouteData.Values["action"]} Message: {ex.Message}");
                             ViewData["Message"] = "Something went wrong";
                             return View();
                         }

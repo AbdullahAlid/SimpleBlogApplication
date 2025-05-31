@@ -12,9 +12,9 @@ namespace SimpleBlogApplication.DAL.IRepositories
     {
         public IEnumerable<Post> GetAllBlog();
         public Post GetBlog(long id);
-        public void AddBlog(Post post);
-        public void UpdateBlog(Post post);
-        public void DeleteBlog(Post post);
+        public bool AddBlog(Post post);
+        public bool UpdateBlog(Post post);
+        public bool DeleteBlog(Post post);
         public Task<IEnumerable<Post>> GetStatusWisePost(int skipped, int amount, Expression<Func<Post, bool>> filter);
         public Task<long> GetStatusWisePostCount(Expression<Func<Post, bool>> filter);
         public IEnumerable<Post> GetTopFiveBlogs();
